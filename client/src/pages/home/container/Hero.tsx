@@ -3,7 +3,7 @@ import { FiSearch } from "react-icons/fi";
 import { images } from '../../../constants'
 
 
-const Hero = () => {
+const Hero: React.FC = () => {
     return (
         <section className='container mx-auto flex flex-col px-5 py-5 lg:flex-row'>
             <div className='mt-10 lg:w-1/2'>
