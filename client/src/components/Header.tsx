@@ -35,10 +35,10 @@ const NavItem: React.FC<INavItemProps> = ({ item }) => {
                 <div className={`${dropdown ? "block" : "hidden"
                     } lg:hidden transition-all duration-500 pt-4 lg:absolute lg:bottom-[-85px] lg:right-[-10] lg:transform lg:traslate-y-full lg:group-hover:block w-max`}>
                     <ul className='bg-dark-soft lg:bg-transparent text-center flex flex-col shadow-lg rounded-lg overflow-hidden'>
-                        {item.items?.map((page) => {
+                        {item.items?.map((page, index) => {
                             return (
 
-                                <a href="/" className='hover:bg-dark-hard hover:text-white px-4 py-2 text-white lg:text-dark-soft'>
+                                <a key={index} href="/" className='hover:bg-dark-hard hover:text-white px-4 py-2 text-white lg:text-dark-soft'>
                                     {page}
                                 </a>
 
