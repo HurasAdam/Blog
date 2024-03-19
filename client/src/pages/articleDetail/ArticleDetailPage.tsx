@@ -4,6 +4,7 @@ import BreadCrumbs from '../../components/BreadCrumbs'
 import { images } from '../../constants';
 import { Link } from 'react-router-dom';
 import SuggestedPosts from './container/SuggestedPosts';
+import CommentContainer from '../../components/comments/CommentContainer';
 
 type IbreadCrumb = {
     name: string;
@@ -89,6 +90,7 @@ const ArticleDetailPage: React.FC = () => {
                             velit ad, eaque quam placeat. Modi illo unde a eius.
                         </p>
                     </div>
+                    <CommentContainer className="mt-10" />
                 </article>
                 <SuggestedPosts
                     header="Latest Article"
