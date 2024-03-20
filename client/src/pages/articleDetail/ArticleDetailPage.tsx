@@ -90,7 +90,10 @@ const ArticleDetailPage: React.FC = () => {
                             velit ad, eaque quam placeat. Modi illo unde a eius.
                         </p>
                     </div>
-                    <CommentContainer className="mt-10" />
+                    <CommentContainer
+                        className="mt-10"
+                        logginedUserId="a"
+                    />
                 </article>
                 <SuggestedPosts
                     header="Latest Article"
