@@ -5,6 +5,7 @@ import { images } from '../../constants';
 import { Link } from 'react-router-dom';
 import SuggestedPosts from './container/SuggestedPosts';
 import CommentContainer from '../../components/comments/CommentContainer';
+import SoscialShareButtons from '../../components/comments/SoscialShareButtons';
 
 type IbreadCrumb = {
     name: string;
@@ -95,12 +96,28 @@ const ArticleDetailPage: React.FC = () => {
                         logginedUserId="a"
                     />
                 </article>
-                <SuggestedPosts
-                    header="Latest Article"
-                    posts={postsData}
-                    tags={tagsData}
-                    className="mt-8 lg:mt-0 lg:max-w-xs"
-                />
+
+                <div>
+                    <SuggestedPosts
+                        header="Latest Article"
+                        posts={postsData}
+                        tags={tagsData}
+                        className="mt-8 lg:mt-0 lg:max-w-xs"
+                    />
+                    <div className='mt-7'>
+                        <h2
+                            className='font-robot font-medium text-dark-hard 
+                        mb-4 md:text-xl'>
+                            share on
+                        </h2>
+                        <SoscialShareButtons
+                            url={encodeURI("https://docs.kiszczyc.pl/")}
+                            title={encodeURIComponent("Monsters-docs")}
+                        />
+                    </div>
+                </div>
+
+
             </section>
 
 
