@@ -1,14 +1,16 @@
-import express, { Request, Response } from "express"
+import express, { Request, Response, NextFunction } from "express"
 import User from "../models/User";
 
-const registerUser = async (req: Request, res: Response) => {
+
+const registerUser = async (req: Request, res: express.Response, next: NextFunction) => {
     try {
         const { name, email, password } = req.body;
 
         let user = await User.findOne({ email })
 
         if (user) {
-            return res.status(400).json({ message: "User already exist." })
+            // return res.status(400).json({ message: "User already exist." })
+            throw new Error("User already exist.")
         }
 
         user = await User.create({
@@ -26,7 +28,7 @@ const registerUser = async (req: Request, res: Response) => {
 
     } catch (error) {
         console.log(error)
-        res.status(500).json({ message: "Something went wrong..." })
+        next(error)
     }
 };
 
