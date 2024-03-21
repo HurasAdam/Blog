@@ -1,22 +1,11 @@
 import { Schema, model, Document } from "mongoose";
-import { hash } from "bcryptjs";
+import { hash, compare } from "bcryptjs";
 import { sign } from "jsonwebtoken";
+import * as types from "../shared/types";
 
-interface IUserDocument extends IUser, Document {
-    generateJWT(): Promise<string>;
-}
 
-interface IUser {
-    avatar: string;
-    name: string;
-    email: string;
-    password: string;
-    verified: boolean;
-    verificationCode: string;
-    admin: boolean
-}
 
-const UserSchema = new Schema<IUser>({
+const UserSchema = new Schema<types.IUser>({
     avatar: { type: String, default: "" },
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
@@ -27,7 +16,7 @@ const UserSchema = new Schema<IUser>({
 
 }, { timestamps: true })
 
-UserSchema.pre<IUserDocument>('save', async function (next) {
+UserSchema.pre<types.IUserDocument>('save', async function (next) {
     if (this.isDirectModified('password')) {
         this.password = await hash(this.password, 10);
         return next();
@@ -35,8 +24,13 @@ UserSchema.pre<IUserDocument>('save', async function (next) {
     return next()
 })
 
-UserSchema.methods.generateJWT = async function () {
+UserSchema.methods.generateJWT = async function (): Promise<string> {
     return await sign({ id: this._id }, process.env.JWT_SECRET as string, { expiresIn: '30d' })
 }
-const User = model<IUserDocument>("User", UserSchema);
+
+UserSchema.methods.comparePassword = async function (password: string): Promise<boolean> {
+    return await compare(password, this.password);
+}
+
+const User = model<types.IUserDocument>("User", UserSchema);
 export default User;

@@ -1,10 +1,9 @@
 import Express, { Response, Request, NextFunction } from "express"
+import * as types from "../shared/types";
 
-interface customError extends Error {
-    statusCode?: number;
-}
 
-export const errorResponseHandler = (err: customError, req: Request, res: Response, next: NextFunction) => {
+
+export const errorResponseHandler = (err: types.customError, req: Request, res: Response, next: NextFunction) => {
 
     const statusCode = err.statusCode || 400;
     res.status(statusCode).json({
@@ -13,7 +12,7 @@ export const errorResponseHandler = (err: customError, req: Request, res: Respon
 }
 
 export const invalidPathHandler = (req: Request, res: Response, next: NextFunction) => {
-    let error: customError = new Error("Invalid Path");
+    let error: types.customError = new Error("Invalid Path");
     error.statusCode = 404;
     next(error);
 }
