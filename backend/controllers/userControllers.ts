@@ -1,6 +1,8 @@
 import express, { Request, Response, NextFunction } from "express"
+import cloudinary from "cloudinary"
 import User from "../models/User";
 import * as types from "../shared/types"
+import { uploadFile } from "../middleware/uploadMiddleware";
 
 
 const registerUser = async (req: Request, res: express.Response, next: NextFunction) => {
@@ -37,8 +39,7 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { email, password } = req.body;
         let user = await User.findOne({ email })
-        console.log("req.user")
-        console.log(req.user)
+
         if (!user) {
             throw new Error("Email not found")
         }
@@ -119,7 +120,50 @@ const updateProfile = async (req: Request, res: Response, next: NextFunction) =>
 
     } catch (error) {
         console.log(error)
+        next(error)
     }
 }
 
-export { registerUser, loginUser, userProfile, updateProfile };
+const updateProfilePicture = async (req: Request, res: Response, next: NextFunction) => {
+
+
+    const file = req.file
+
+
+    try {
+
+
+        if (!file) {
+            throw new Error("An unexpected error occured while uploading file.")
+        }
+
+        const b64 = Buffer.from(file.buffer).toString("base64");
+        let dataURI = "data:" + file.mimetype + ";base64," + b64;
+        const response = await cloudinary.v2.uploader.upload(dataURI);
+
+        let user = await User.findById(req.user);
+
+        if (!user) {
+            throw new Error("Something went wrong...")
+        }
+        user.avatar = response.url || ""
+        const updatedUser = await user.save()
+        return res.status(200).json(updatedUser)
+    } catch (error) {
+        console.log(error)
+
+
+    }
+}
+
+const uploadImage = async (imageFile: Express.Multer.File) => {
+    const b64 = Buffer.from(imageFile.buffer).toString("base64");
+    let dataURI = "data:" + imageFile.mimetype + ";base64," + b64;
+    const response = await cloudinary.v2.uploader.upload(dataURI);
+    return response.url;
+}
+
+
+
+
+export { registerUser, loginUser, userProfile, updateProfile, updateProfilePicture };
