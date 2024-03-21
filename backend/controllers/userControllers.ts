@@ -88,9 +88,38 @@ const userProfile = async (req: Request, res: Response, next: NextFunction) => {
     } catch (error) {
         console.log(error)
     }
-
-
-
 }
 
-export { registerUser, loginUser, userProfile };
+const updateProfile = async (req: Request, res: Response, next: NextFunction) => {
+    const { name, email, password } = req.body
+
+    try {
+        let user = await User.findById(req.user);
+
+        if (!user) {
+            throw new Error("User not found.")
+        }
+        user.name = name || user.name;
+        user.email = email || user.email;
+        if (password && password.lenhth < 6) {
+            throw new Error("Password length must be at least 6 characters.")
+        }
+        else if (password) {
+            user.password = password
+        }
+        const updatedUserProfile = await user.save()
+        res.status(200).json({
+            _id: updatedUserProfile._id,
+            avatar: updatedUserProfile.avatar,
+            name: updatedUserProfile.name,
+            email: updatedUserProfile.email,
+            verified: updatedUserProfile.verified,
+            admin: updatedUserProfile.admin,
+        })
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export { registerUser, loginUser, userProfile, updateProfile };
