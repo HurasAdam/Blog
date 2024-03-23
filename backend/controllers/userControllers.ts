@@ -134,34 +134,32 @@ const updateProfilePicture = async (req: Request, res: Response, next: NextFunct
 
 
         if (!file) {
-            throw new Error("An unexpected error occured while uploading file.")
+            throw new Error("An unexpected error occurred while uploading the file.")
         }
 
         const b64 = Buffer.from(file.buffer).toString("base64");
         let dataURI = "data:" + file.mimetype + ";base64," + b64;
-        const response = await cloudinary.v2.uploader.upload(dataURI);
-
         let user = await User.findById(req.user);
 
         if (!user) {
-            throw new Error("Something went wrong...")
+            throw new Error("An unexpected error occurred while uploading the file.")
         }
-        user.avatar = response.url || ""
+        const response = await cloudinary.v2.uploader.upload(dataURI);
+        if (!response) {
+            throw new Error("")
+        }
+
+
+        user.avatar = response.url;
         const updatedUser = await user.save()
         return res.status(200).json(updatedUser)
     } catch (error) {
         console.log(error)
-
+        next(error)
 
     }
 }
 
-const uploadImage = async (imageFile: Express.Multer.File) => {
-    const b64 = Buffer.from(imageFile.buffer).toString("base64");
-    let dataURI = "data:" + imageFile.mimetype + ";base64," + b64;
-    const response = await cloudinary.v2.uploader.upload(dataURI);
-    return response.url;
-}
 
 
 
