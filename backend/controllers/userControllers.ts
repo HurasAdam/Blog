@@ -116,6 +116,7 @@ const updateProfile = async (req: Request, res: Response, next: NextFunction) =>
             email: updatedUserProfile.email,
             verified: updatedUserProfile.verified,
             admin: updatedUserProfile.admin,
+            token: await updatedUserProfile.generateJWT()
         })
 
     } catch (error) {
