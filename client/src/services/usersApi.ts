@@ -18,3 +18,40 @@ export const signup = async ({ name, email, password }) => {
     }
 
 }
+
+export const login = async ({ email, password }) => {
+
+
+    try {
+        const response = await axios.post("http://localhost:5000/api/users/login", {
+            email, password
+        })
+        return response.data
+    } catch (error: Error) {
+        if (error.response && error.response.data.message) {
+            throw new Error(error.response.data.message)
+        } else {
+            throw new Error(error.message)
+        }
+    }
+
+}
+
+export const getUserProfile = async ({ token }: string) => {
+    try {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+        const response = await axios.get("http://localhost:5000/api/users/profile", config);
+        return response.data
+    } catch (error: Error) {
+        if (error.response && error.response.data.message) {
+            throw new Error(error.response.data.message);
+        } else {
+            throw new Error(error.message);
+        }
+
+    }
+}
