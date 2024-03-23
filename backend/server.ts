@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { v2 as cloudinary } from "cloudinary"
 import "dotenv/config";
 import connectDB from "./config/db";
+import cors from "cors";
 
 // Routes
 import userRoutes from "./routes/userRoutes"
@@ -20,6 +21,9 @@ cloudinary.config({
 
 const app = express();
 app.use(express.json());
+app.use(cors({
+    origin: process.env.FRONTED_URL
+}));
 
 app.get('/', (req, res) => {
     res.status(200).json("SERVER IS RUNING...")
