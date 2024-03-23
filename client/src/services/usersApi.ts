@@ -55,3 +55,23 @@ export const getUserProfile = async ({ token }: string) => {
 
     }
 }
+
+export const updateProfile = async ({ token, userData }) => {
+    try {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+        const response = await axios.put("http://localhost:5000/api/users/updateProfile", userData, config);
+        return response.data;
+
+    } catch (error: Error) {
+        if (error.response && error.response.data.message) {
+            throw new Error(error.response.data.message)
+        } else {
+            throw new Error(error.message)
+        }
+
+    }
+}

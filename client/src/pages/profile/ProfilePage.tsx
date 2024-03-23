@@ -4,15 +4,18 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootUserState } from '../../types';
-import { useQuery } from '@tanstack/react-query';
-import { getUserProfile } from '../../services/usersApi';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { getUserProfile, updateProfile } from '../../services/usersApi';
 import ProfilePicture from '../../components/ProfilePicture';
+import { userActions } from '../../store/reducers/userReducers';
+import toast from 'react-hot-toast';
 
 const ProfilePage = () => {
 
     const dispatch = useDispatch()
     const userState = useSelector((state: IRootUserState) => state.user.userInfo)
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
 
     const { data: profileData, isError, isLoading } = useQuery({
         queryFn: () => {
@@ -20,6 +23,27 @@ const ProfilePage = () => {
         },
         queryKey: ['profile']
     })
+
+
+    const { mutate, isLoading: isUpdating } = useMutation({
+        mutationFn: ({ name, email, password }) => {
+            return updateProfile({
+                token: userState.token,
+                userData: { name, email, password }
+            })
+        },
+        onSuccess: (data) => {
+            dispatch(userActions.setUserInfo(data));
+            localStorage.setItem("account", JSON.stringify(data));
+            queryClient.invalidateQueries(["profile"]);
+            toast.success("Profile updated sucessfully")
+
+        },
+        onError: (error) => {
+
+        }
+    })
+
 
     useEffect(() => {
         if (!userState) {
@@ -47,7 +71,8 @@ const ProfilePage = () => {
         });
 
     const submitHandler = (data) => {
-
+        const { name, email, password } = data;
+        mutate({ name, email, password });
     }
 
     return (
@@ -120,22 +145,13 @@ const ProfilePage = () => {
                             <label
                                 htmlFor="password"
                                 className='text-[#5a7184] font-semibold block'>
-                                Password
+                                New Password (optional)
                             </label>
                             <input
-                                {...register("password", {
-                                    required: {
-                                        value: true,
-                                        message: "Password is required"
-                                    },
-                                    minLength: {
-                                        value: 6,
-                                        message: "Password lenght must be at least 6 characters"
-                                    }
-                                })}
+                                {...register("password")}
                                 type="password"
                                 id='password'
-                                placeholder='Eneter your password'
+                                placeholder='Eneter new password'
                                 className={`placeholder:text-[#959ead] text-dark-hard mb-3 rounded-lg 
                                 px-5 py-4 font-semibold block outline-none border border-[#c3cad9] ${errors.password ? "border-red-500" : "border-[#c3cad9]"}`}
 
