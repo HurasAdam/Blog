@@ -1,8 +1,7 @@
-import { verify, JwtPayload } from "jsonwebtoken";
+import { Types } from "mongoose";
 export interface customError extends Error {
     statusCode?: number;
 }
-
 
 export interface IUserDocument extends IUser, Document {
     generateJWT(): Promise<string>;
@@ -20,7 +19,29 @@ export interface IUser {
     admin: boolean
 }
 
+export interface IPost {
+    title: string;
+    caption: string;
+    slug: string;
+    body: Record<string, any>;
+    photo: Types.ObjectId;
+    user: string;
+    tags: string[];
+    categories: Types.ObjectId[];
+}
 
+export interface IPostCategory {
+    name: string;
+}
+
+export interface IComment {
+    user: Types.ObjectId;
+    description: string;
+    postId: Types.ObjectId;
+    check: boolean;
+    parent: Types.ObjectId;
+    replyOnUser: Types.ObjectId;
+}
 
 declare global {
     namespace Express {
