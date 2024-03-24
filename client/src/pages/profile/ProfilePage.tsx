@@ -164,9 +164,9 @@ const ProfilePage = () => {
 
                         <button
                             type='submit'
-                            disabled={!isValid || isLoading}
+                            disabled={!isValid || isLoading || isUpdating}
                             className='bg-primary text-white font-bold text-lg py-4 px-8 w-full rounded-lg mb-6 disabled:opacity-70 disabled:cursor-not-allowed'>
-                            Register
+                            Update
                         </button>
 
                     </form>

@@ -129,11 +129,7 @@ const updateProfilePicture = async (req: Request, res: Response, next: NextFunct
 
 
     const file = req.file
-
-
     try {
-
-
         if (!file) {
             throw new Error("An unexpected error occurred while uploading the file.")
         }
@@ -147,13 +143,19 @@ const updateProfilePicture = async (req: Request, res: Response, next: NextFunct
         }
         const response = await cloudinary.v2.uploader.upload(dataURI);
         if (!response) {
-            throw new Error("")
+            throw new Error("An unexpected error occurred while uploading the file.")
         }
-
-
         user.avatar = response.url;
         const updatedUser = await user.save()
-        return res.status(200).json(updatedUser)
+        return res.status(200).json({
+            _id: updatedUser._id,
+            avatar: updatedUser.avatar,
+            name: updatedUser.name,
+            email: updatedUser.email,
+            verified: updatedUser.verified,
+            admin: updatedUser.admin,
+            token: await updatedUser.generateJWT()
+        })
     } catch (error) {
         console.log(error)
         next(error)
