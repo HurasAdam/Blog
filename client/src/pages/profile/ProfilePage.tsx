@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import MainLayout from "../../components/MainLayout";
 import { useForm } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
+import * as types from "../../types/index"
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootUserState } from '../../types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -26,7 +27,7 @@ const ProfilePage = () => {
 
 
     const { mutate, isLoading: isUpdating } = useMutation({
-        mutationFn: ({ name, email, password }) => {
+        mutationFn: ({ name, email, password }: { name: string, email: string, password: string }) => {
             return updateProfile({
                 token: userState.token,
                 userData: { name, email, password }
@@ -70,7 +71,7 @@ const ProfilePage = () => {
             mode: "onChange",
         });
 
-    const submitHandler = (data) => {
+    const submitHandler = (data: types.IRegisterFormData) => {
         const { name, email, password } = data;
         mutate({ name, email, password });
     }

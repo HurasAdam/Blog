@@ -1,8 +1,9 @@
 import React from 'react'
 import { FaFacebookSquare, FaTwitterSquare, FaRedditSquare, FaWhatsappSquare } from 'react-icons/fa'
+import * as types from "../../types/index"
 
 
-const SoscialShareButtons: React.FC = ({ url, title }) => {
+const SoscialShareButtons: React.FC<types.ISoscialShareButtonsProps> = ({ url, title }) => {
     return (
         <div className='w-full flex justify-between'>
             <a

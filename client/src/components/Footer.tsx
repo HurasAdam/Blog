@@ -1,7 +1,7 @@
 import React from 'react'
 import { images } from '../constants'
 import { AiOutlineTwitter, AiFillInstagram } from "react-icons/ai";
-import { FaFacebook, FaHeart } from "react-icons/fa";
+import { FaFacebook } from "react-icons/fa";
 import { BsTelegram } from 'react-icons/bs';
 import { FaBlog } from "react-icons/fa6";
 
@@ -159,7 +159,7 @@ const Footer: React.FC = () => {
           <div className='bg-primary text-white p-3 rounded-full'>
             <FaBlog className='w-7 h-auto' />
           </div>
-          <p className='border-2 font-bold italic text-dark-light'>Copyright © 2024. HurasAdam. </p>
+          <p className=' font-bold italic text-dark-light'>Copyright © 2024. HurasAdam. </p>
         </div>
       </footer>
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import MainLayout from "../../components/MainLayout";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from 'react-router-dom';
@@ -7,12 +7,13 @@ import { signup } from "../../services/usersApi"
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from 'react-redux';
 import { userActions } from '../../store/reducers/userReducers';
-import { IRootUserState } from '../../types';
+import * as types from "../../types/index"
+
 
 const RegisterPage = () => {
 
     const dispatch = useDispatch()
-    const userState = useSelector((state: IRootUserState) => state.user.userInfo)
+    const userState = useSelector((state: types.IRootUserState) => state.user.userInfo)
     const navigate = useNavigate();
 
     const { mutate, isLoading } = useMutation({
@@ -50,7 +51,9 @@ const RegisterPage = () => {
         mode: "onChange",
     });
 
-    const submitHandler = (data) => {
+
+
+    const submitHandler = (data: types.IRegisterFormData) => {
         const { name, email, password } = data;
         mutate({ name, email, password })
     }

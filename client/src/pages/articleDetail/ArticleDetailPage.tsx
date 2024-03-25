@@ -6,13 +6,11 @@ import { Link } from 'react-router-dom';
 import SuggestedPosts from './container/SuggestedPosts';
 import CommentContainer from '../../components/comments/CommentContainer';
 import SoscialShareButtons from '../../components/comments/SoscialShareButtons';
+import * as types from "../../types/index"
 
-type IbreadCrumb = {
-    name: string;
-    link: string;
-}
 
-const breadCrumbsData: IbreadCrumb[] = [
+
+const breadCrumbsData: types.IbreadCrumb[] = [
     { name: "Home", link: "/" },
     { name: "Blog", link: "/blog" },
     { name: "Article title", link: "/blog/1" },

@@ -1,6 +1,7 @@
+import * as types from "../types/index"
+import axios, { AxiosResponse } from "axios";
 
-import axios from "axios";
-export const signup = async ({ name, email, password }) => {
+export const signup = async ({ name, email, password }: types.IRegisterFormData) => {
 
     try {
         const response = await axios.post("http://localhost:5000/api/users/register", {
@@ -9,35 +10,36 @@ export const signup = async ({ name, email, password }) => {
             password
         });
         return response.data;
-    } catch (error: Error) {
-        if (error.response && error.response.data.message) {
-            throw new Error(error.response.data.message);
-        } else {
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.log('error message: ', error.message);
             throw new Error(error.message)
+        } else {
+            console.log('unexpected error: ', error);
+            throw new Error("An unexpected error occurred")
         }
     }
-
 }
 
-export const login = async ({ email, password }) => {
-
+export const login = async ({ email, password }: types.ILoginFormData): Promise<AxiosResponse<types.IUserInfo>> => {
 
     try {
         const response = await axios.post("http://localhost:5000/api/users/login", {
             email, password
         })
         return response.data
-    } catch (error: Error) {
-        if (error.response && error.response.data.message) {
-            throw new Error(error.response.data.message)
-        } else {
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.log('error message: ', error.message);
             throw new Error(error.message)
+        } else {
+            console.log('unexpected error: ', error);
+            throw new Error("An unexpected error occurred")
         }
     }
-
 }
 
-export const getUserProfile = async ({ token }: string) => {
+export const getUserProfile = async ({ token }: types.IToken): Promise<AxiosResponse<types.IProfileResponse>> => {
     try {
         const config = {
             headers: {
@@ -46,17 +48,18 @@ export const getUserProfile = async ({ token }: string) => {
         }
         const response = await axios.get("http://localhost:5000/api/users/profile", config);
         return response.data
-    } catch (error: Error) {
-        if (error.response && error.response.data.message) {
-            throw new Error(error.response.data.message);
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.log('error message: ', error.message);
+            throw new Error(error.message)
         } else {
-            throw new Error(error.message);
+            console.log('unexpected error: ', error);
+            throw new Error("An unexpected error occurred")
         }
-
     }
 }
 
-export const updateProfile = async ({ token, userData }) => {
+export const updateProfile = async ({ token, userData }: types.IUpdateProfileFormData): Promise<AxiosResponse<types.IUserInfo>> => {
     try {
         const config = {
             headers: {
@@ -66,17 +69,18 @@ export const updateProfile = async ({ token, userData }) => {
         const response = await axios.put("http://localhost:5000/api/users/updateProfile", userData, config);
         return response.data;
 
-    } catch (error: Error) {
-        if (error.response && error.response.data.message) {
-            throw new Error(error.response.data.message)
-        } else {
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.log('error message: ', error.message);
             throw new Error(error.message)
+        } else {
+            console.log('unexpected error: ', error);
+            throw new Error("An unexpected error occurred")
         }
-
     }
 }
 
-export const updateProfilePicture = async ({ token, formData }) => {
+export const updateProfilePicture = async ({ token, formData }: types.IUpdateProfilePictureFormData): Promise<AxiosResponse<types.IUserInfo>> => {
     try {
         const config = {
             headers: {
@@ -92,8 +96,12 @@ export const updateProfilePicture = async ({ token, formData }) => {
         );
         return data;
     } catch (error) {
-        if (error.response && error.response.data.message)
-            throw new Error(error.response.data.message);
-        throw new Error(error.message);
+        if (axios.isAxiosError(error)) {
+            console.log('error message: ', error.message);
+            throw new Error(error.message)
+        } else {
+            console.log('unexpected error: ', error);
+            throw new Error("An unexpected error occurred")
+        }
     }
 };
