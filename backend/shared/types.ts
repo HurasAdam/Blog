@@ -24,8 +24,8 @@ export interface IPost {
     caption: string;
     slug: string;
     body: Record<string, any>;
-    photo: Types.ObjectId;
-    user: string;
+    user: Types.ObjectId;
+    photo: string;
     tags: string[];
     categories: Types.ObjectId[];
 }

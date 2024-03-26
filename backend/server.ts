@@ -4,9 +4,11 @@ import { v2 as cloudinary } from "cloudinary"
 import "dotenv/config";
 import connectDB from "./config/db";
 import cors from "cors";
+import bodyParser from "body-parser";
 
 // Routes
 import userRoutes from "./routes/userRoutes"
+import postRoutes from "./routes/postsRoutes"
 import { errorResponseHandler, invalidPathHandler } from "./middleware/errorHandler";
 
 cloudinary.config({
@@ -20,7 +22,9 @@ cloudinary.config({
 
 
 const app = express();
+
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors({
     origin: process.env.FRONTED_URL
 }));
@@ -33,6 +37,7 @@ app.get('/', (req, res) => {
 
 
 app.use('/api/users', userRoutes);
+app.use('/api/posts', postRoutes);
 app.use(invalidPathHandler)
 app.use(errorResponseHandler);
 
