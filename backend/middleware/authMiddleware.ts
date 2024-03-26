@@ -33,6 +33,16 @@ export const authGuard = async (req: Request, res: Response, next: NextFunction)
 
 }
 
+export const adminGuard = async (req: Request, res: Response, next: NextFunction) => {
+    const user = await User.findById({ _id: req.user });
 
+    if (user && user.admin) {
+        next()
+    } else {
+        let err: types.customError = new Error("Not authorized as admin.")
+        err.statusCode = 401;
+        next(err)
+    }
+}
 
 
