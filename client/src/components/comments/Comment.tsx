@@ -33,7 +33,7 @@ const Comment = ({
     return (
         <div className="flex flex-nowrap items-start gap-x-3 bg-[#F2F4F5] p-3 rounded-lg">
             <img
-                src={images.PostProfileImage}
+                src={comment?.user?.avatar ? comment?.user?.avatar : images.userImage}
                 alt="user profile"
                 className="w-9 h-9 object-cover rounded-full"
             />
@@ -51,7 +51,7 @@ const Comment = ({
                 </span>
                 {!isEditing && (
                     <p className="font-opensans mt-[10px] text-dark-light">
-                        {comment.desc}
+                        {comment.description}
                     </p>
                 )}
                 {isEditing && (
@@ -59,7 +59,7 @@ const Comment = ({
                         btnLabel="Update"
                         formSubmitHanlder={(value) => updateComment(value, comment._id)}
                         formCancelHandler={() => setAffectedComment(null)}
-                        initialText={comment.desc}
+                        initialText={comment.description}
                     />
                 )}
                 <div className="flex items-center gap-x-3 text-dark-light font-roboto text-sm mt-3 mb-3">

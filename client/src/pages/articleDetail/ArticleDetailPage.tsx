@@ -12,6 +12,8 @@ import { getPost } from '../../services/postApi';
 import toast from 'react-hot-toast';
 import ArticleDetailSkeleton from './components/ArticleDetailSkeleton';
 import ErrorMessage from '../../components/comments/ErrorMessage';
+import { useSelector } from 'react-redux';
+import { IRootUserState } from '../../types/index';
 
 
 
@@ -56,6 +58,8 @@ const tagsData = [
 
 const ArticleDetailPage: React.FC = () => {
     const { id } = useParams();
+    const userState = useSelector((state: IRootUserState) => state.user.userInfo)
+
     const [breadCrumbsData, setBreadCrumbsData] = useState([])
 
     const { data: postDetails, isLoading, isError } = useQuery({
@@ -135,8 +139,9 @@ const ArticleDetailPage: React.FC = () => {
                         </p>
                     </div>
                     <CommentContainer
+                        comments={postDetails?.comments}
                         className="mt-10"
-                        logginedUserId="a"
+                        logginedUserId={userState?._id}
                     />
                 </article>
 
