@@ -37,7 +37,7 @@ export interface IPostCategory {
 export interface IComment {
     user: Types.ObjectId;
     description: string;
-    postId: Types.ObjectId;
+    post: Types.ObjectId;
     check: boolean;
     parent: Types.ObjectId;
     replyOnUser: Types.ObjectId;
