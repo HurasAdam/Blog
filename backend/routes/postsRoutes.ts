@@ -6,8 +6,10 @@ const router = express.Router();
 
 
 router.post("/", authGuard, uploadFile.single("postPicture"), postController.createPost);
+router.get("/:id", postController.getPost);
+router.get("/", postController.getAllPosts);
 router.put("/:id", authGuard, uploadFile.single("postPicture"), postController.updatePost);
-router.get("/:id", authGuard, postController.getPost);
+router.delete("/:id", authGuard, adminGuard, postController.deletePost);
 
 
 export default router;

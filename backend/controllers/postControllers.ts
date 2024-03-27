@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from "express"
 import cloudinary from "cloudinary";
 import multer, { FileFilterCallback } from "multer";
 import Post from "../models/Post";
+import Comment from "../models/Comment";
 import * as types from "../shared/types"
 import { uploadFile } from "../middleware/uploadMiddleware";
 import { v4 as uuidv4 } from "uuid";
@@ -19,9 +20,6 @@ const createPost = async (req: Request, res: express.Response, next: NextFunctio
             const cloudinaryResponseUrl = await cloudinary.v2.uploader.upload(dataURI);
             photo = cloudinaryResponseUrl.url
         }
-
-
-
 
         const post = new Post({
             title,
@@ -91,13 +89,56 @@ const updatePost = async (req: Request, res: express.Response, next: NextFunctio
 };
 
 
+const getAllPosts = async (req: Request, res: express.Response, next: NextFunction) => {
+    try {
+        const posts = await Post.find({}).populate({
+            path: "user",
+            select: ["avatar", "name", "verified"]
+        })
+        return res.status(200).json(posts)
+    } catch (err) {
+        next(err)
+    }
+}
+
 const getPost = async (req: Request, res: express.Response, next: NextFunction) => {
+
+
 
     try {
         const { id } = req.params;
 
-        const post = await Post.findById({ _id: id })
+        const post = await Post.findById({ _id: id }).populate([
+            {
+                path: "user",
+                select: ["name", "avatar"]
+            },
+            {
+                path: "comments",
+                match: {
+                    check: true,
+                    parent: null
+                },
+                populate: [
+                    {
+                        path: "user",
+                        select: ["avatar", "name"]
+                    },
+                    {
+                        path: "replies",
+                        match: {
+                            check: true
+                        }
+                    }
+                ]
+            }
+        ])
 
+        if (!post) {
+            const err = new Error("Post was not found")
+            next(err);
+            return;
+        }
         res.status(200).json(post);
 
     } catch (error) {
@@ -106,7 +147,25 @@ const getPost = async (req: Request, res: express.Response, next: NextFunction) 
     }
 };
 
+const deletePost = async (req: Request, res: express.Response, next: NextFunction) => {
+    try {
+
+        const { id } = req.params;
+        const post = await Post.findOneAndDelete({ _id: id });
+
+        if (!post) {
+            const err = new Error("Post was not found")
+            next(err)
+            return
+        }
+        const comments = await Comment.deleteMany({ post: post._id })
+        return res.status(200).json({ message: "Post is sucessfully deleted" })
+    } catch (err) {
+        next(err)
+    }
+}
 
 
 
-export { createPost, updatePost, getPost };
+
+export { createPost, updatePost, getAllPosts, getPost, deletePost };
