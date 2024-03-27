@@ -9,6 +9,7 @@ import bodyParser from "body-parser";
 // Routes
 import userRoutes from "./routes/userRoutes"
 import postRoutes from "./routes/postsRoutes"
+import comentRoutes from "./routes/commentRoutes"
 import { errorResponseHandler, invalidPathHandler } from "./middleware/errorHandler";
 
 cloudinary.config({
@@ -38,6 +39,8 @@ app.get('/', (req, res) => {
 
 app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
+app.use('/api/comments', comentRoutes);
+
 app.use(invalidPathHandler)
 app.use(errorResponseHandler);
 
