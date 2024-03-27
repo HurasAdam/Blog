@@ -128,7 +128,13 @@ const getPost = async (req: Request, res: express.Response, next: NextFunction) 
                         path: "replies",
                         match: {
                             check: true
-                        }
+                        },
+                        populate: [
+                            {
+                                path: "user",
+                                select: ["avatar", "name"]
+                            }
+                        ]
                     }
                 ]
             }
