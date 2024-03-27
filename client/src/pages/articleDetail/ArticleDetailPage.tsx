@@ -1,20 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import MainLayout from '../../components/MainLayout'
 import BreadCrumbs from '../../components/BreadCrumbs'
 import { images } from '../../constants';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import SuggestedPosts from './container/SuggestedPosts';
 import CommentContainer from '../../components/comments/CommentContainer';
 import SoscialShareButtons from '../../components/comments/SoscialShareButtons';
 import * as types from "../../types/index"
+import { useQuery } from '@tanstack/react-query';
+import { getPost } from '../../services/postApi';
+import toast from 'react-hot-toast';
+import ArticleDetailSkeleton from './components/ArticleDetailSkeleton';
+import ErrorMessage from '../../components/comments/ErrorMessage';
 
 
-
-const breadCrumbsData: types.IbreadCrumb[] = [
-    { name: "Home", link: "/" },
-    { name: "Blog", link: "/blog" },
-    { name: "Article title", link: "/blog/1" },
-]
 
 const postsData = [
     {
@@ -54,26 +53,72 @@ const tagsData = [
     "Education"
 ]
 
+
 const ArticleDetailPage: React.FC = () => {
+    const { id } = useParams();
+    const [breadCrumbsData, setBreadCrumbsData] = useState([])
+
+    const { data: postDetails, isLoading, isError } = useQuery({
+        queryFn: () => getPost({ id }),
+        queryKey: ["post"],
+        onError: (error: Error) => {
+            toast.error(error.message)
+        },
+        onSuccess: () => {
+            setBreadCrumbsData(
+                [
+                    { name: "Home", link: "/" },
+                    { name: "Blog", link: "/blog" },
+                    { name: "Article title", link: `/blog/${postDetails?._id}` },
+                ]
+            )
+        },
+    })
+
+    if (isLoading) {
+        return (
+            <MainLayout >
+                <ArticleDetailSkeleton />
+            </MainLayout>)
+
+    }
+
+    if (isError) {
+        return (
+            <MainLayout >
+                <ErrorMessage message="Something went wrong..." />
+            </MainLayout>)
+    }
+
     return (
         <MainLayout >
+
+
             <section className='container  mx-auto max-w-5xl flex flex-col px-5 py-5 lg:flex-row lg:gap-x-5 lg:items-start'>
                 <article className='flex-1'>
                     <BreadCrumbs data={breadCrumbsData} />
                     <img
-                        className='rounded-xl w-full'
-                        src={images.Post1}
-                        alt="laptop" />
-                    <Link
-                        to='/blog?category=selectedCategory'
-                        className='text-primary text-sm font-roboto inline-block mt-4 md:text-base'
-                    >
-                        Education
-                    </Link>
+                        className='rounded-xl w-full '
+                        src={postDetails?.photo ? postDetails?.photo : images.Post3}
+                        alt={postDetails?.title} />
+
+                    <div className='mt-4 flex gap-2'>
+                        {postDetails?.categories.map((category) => {
+                            return (
+                                <Link
+                                    to={`/blog?category=${category.name}`}
+                                    className='text-primary text-sm font-roboto inline-block  md:text-base'
+                                >
+                                    {category.name}
+                                </Link>
+                            )
+                        })}
+                    </div>
+
 
                     <h1
                         className='text-xl font-medium font-roboto mt-4 text-dark-hard md:text-[26px]'
-                    >Help children et better education</h1>
+                    >{postDetails?.title}</h1>
 
                     <div className='mt-4 text-dark-soft'>
                         <p className='leading-7'>
