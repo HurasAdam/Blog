@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import MainLayout from "../../components/MainLayout";
 import { useForm } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
@@ -18,7 +18,7 @@ const ProfilePage = () => {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
-    const { data: profileData, isError, isLoading } = useQuery({
+    const { data: profileData, isError, isProfileDataLoading } = useQuery({
         queryFn: () => {
             return getUserProfile({ token: userState.token });
         },
@@ -63,11 +63,13 @@ const ProfilePage = () => {
                 password: "",
 
             },
-            values: {
-                name: isLoading ? "" : profileData.name,
-                email: isLoading ? "" : profileData.email,
+            values: useMemo(() => {
+                return {
+                    name: isProfileDataLoading ? "" : profileData?.name,
+                    email: isProfileDataLoading ? "" : profileData?.email,
 
-            },
+                }
+            }, [profileData?.name, profileData?.email, isProfileDataLoading]),
             mode: "onChange",
         });
 
@@ -165,7 +167,7 @@ const ProfilePage = () => {
 
                         <button
                             type='submit'
-                            disabled={!isValid || isLoading || isUpdating}
+                            disabled={!isValid || isProfileDataLoading || isUpdating}
                             className='bg-primary text-white font-bold text-lg py-4 px-8 w-full rounded-lg mb-6 disabled:opacity-70 disabled:cursor-not-allowed'>
                             Update
                         </button>
