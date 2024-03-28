@@ -8,7 +8,7 @@ import CommentContainer from '../../components/comments/CommentContainer';
 import SoscialShareButtons from '../../components/comments/SoscialShareButtons';
 import * as types from "../../types/index"
 import { useQuery } from '@tanstack/react-query';
-import { getPost } from '../../services/postApi';
+import { getAllPosts, getPost } from '../../services/postApi';
 import toast from 'react-hot-toast';
 import ArticleDetailSkeleton from './components/ArticleDetailSkeleton';
 import ErrorMessage from '../../components/comments/ErrorMessage';
@@ -16,44 +16,6 @@ import { useSelector } from 'react-redux';
 import { IRootUserState } from '../../types/index';
 
 
-
-const postsData = [
-    {
-        _id: "1",
-        image: images.Post1,
-        title: "Help children get better education",
-        createdAt: "2024-01-28T15:35:53.607+0000",
-    },
-    {
-        _id: "2",
-        image: images.Post1,
-        title: "Help children get better education",
-        createdAt: "2024-01-28T15:35:53.607+0000",
-    },
-    {
-        _id: "3",
-        image: images.Post1,
-        title: "Help children get better education",
-        createdAt: "2024-01-28T15:35:53.607+0000",
-    },
-    {
-        _id: "4",
-        image: images.Post1,
-        title: "Help children get better education",
-        createdAt: "2024-01-28T15:35:53.607+0000",
-    },
-
-]
-
-const tagsData = [
-    "Medical",
-    "Lifestyle",
-    "Learn",
-    "Healthy",
-    "Food",
-    "Diet",
-    "Education"
-]
 
 
 const ArticleDetailPage: React.FC = () => {
@@ -64,7 +26,7 @@ const ArticleDetailPage: React.FC = () => {
 
     const { data: postDetails, isLoading, isError } = useQuery({
         queryFn: () => getPost({ id }),
-        queryKey: ["post"],
+        queryKey: ["post", id],
         onError: (error: Error) => {
             toast.error(error.message)
         },
@@ -77,6 +39,15 @@ const ArticleDetailPage: React.FC = () => {
                 ]
             )
         },
+    })
+
+    const { data: postsData, } = useQuery({
+        queryFn: () => getAllPosts(),
+        queryKey: ["posts"],
+        onError: (error: Error) => {
+            toast.error(error.message)
+        },
+
     })
 
     if (isLoading) {
@@ -142,6 +113,7 @@ const ArticleDetailPage: React.FC = () => {
                         comments={postDetails?.comments}
                         className="mt-10"
                         logginedUserId={userState?._id}
+                        postId={id}
                     />
                 </article>
 
@@ -149,7 +121,7 @@ const ArticleDetailPage: React.FC = () => {
                     <SuggestedPosts
                         header="Latest Article"
                         posts={postsData}
-                        tags={tagsData}
+                        tags={postDetails?.tags}
                         className="mt-8 lg:mt-0 lg:max-w-xs"
                     />
                     <div className='mt-7'>

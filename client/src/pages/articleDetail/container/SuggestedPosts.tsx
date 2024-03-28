@@ -1,7 +1,9 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import images from "../../../constants/images"
 
 const SuggestedPosts: React.FC = ({ className, header, posts = [], tags }) => {
+    console.log(posts)
     return (
         <div
             className={`w-full shadow-[rgba(7,_65,_210,_0.1)_0px_9px_30px] rounded-lg p-4 ${className}`}
@@ -16,12 +18,15 @@ const SuggestedPosts: React.FC = ({ className, header, posts = [], tags }) => {
 
                             <img
                                 className='aspect-square object-cover rounded-lg w-1/5'
-                                src={item.image}
-                                alt='laptop' />
+                                src={item?.photo ? item?.photo : images.Post3}
+                                alt={item?.title} />
 
                             <div className='text-sm font-roboto text-dark-hard font-medium'>
-                                <h3
-                                    className='text-sm font-roboto text-dark-hard  font-medium md:text-base lg:text-lg'>{item.title}</h3>
+                                <Link to={`/blog/${item._id}`}>
+                                    <h3
+                                        className='text-sm font-roboto text-dark-hard  font-medium md:text-base lg:text-lg'>{item.title}
+                                    </h3>
+                                </Link>
                                 <span
                                     className='text-xs opacity-60'>
                                     {new Date(item.createdAt).toLocaleDateString("en-US", {
@@ -36,18 +41,19 @@ const SuggestedPosts: React.FC = ({ className, header, posts = [], tags }) => {
                 })}
             </div>
             <h2 className='font-roboto font-medium text-dark-hard mt-8 md:text-xl'>Tags</h2>
-            <div className='flex flex-wrap gap-x-2 gap-y-2 mt-4'>
-                {tags.map((item, index) => {
-                    return (
-                        <Link
-                            key={index}
-                            className='inline-block rounded-md px-3 py-1.5 bg-primary font-roboto text-xs text-white md:text-sm'
-                            to="/">
-                            {item}
-                        </Link>
-                    )
-                })}
-            </div>
+            {tags.length === 0 ? (<p className='text-center text-slate-500 text-xs mt-2'>No tags for this post</p>) :
+                (<div className='flex flex-wrap gap-x-2 gap-y-2 mt-4'>
+                    {tags.map((item, index) => {
+                        return (
+                            <Link
+                                key={index}
+                                className='inline-block rounded-md px-3 py-1.5 bg-primary font-roboto text-xs text-white md:text-sm'
+                                to="/">
+                                {item}
+                            </Link>
+                        )
+                    })}
+                </div>)}
         </div>
     )
 }
