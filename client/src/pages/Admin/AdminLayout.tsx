@@ -1,9 +1,42 @@
-import { Outlet } from "react-router-dom"
+import { Outlet, useNavigate } from "react-router-dom"
 import Header from "./components/Header"
+import { useQuery } from "@tanstack/react-query";
+import { getUserProfile } from "../../services/usersApi";
+import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import Loader from "../../components/shared/Loader";
+
 
 
 
 const AdminLayout: React.FC = () => {
+    const naviate = useNavigate()
+
+    const userState = useSelector((state: IRootUserState) => state.user.userInfo)
+    const { data: profileData, isError, isLoading: isProfileLoading } = useQuery({
+        queryFn: () => {
+            return getUserProfile({ token: userState.token });
+        },
+        queryKey: ['profile'],
+        retry: false,
+        onSuccess: (data) => {
+            if (!data?.admin) {
+                naviate("/");
+                toast.error("You are not allowed to acess Admin panel")
+            }
+        },
+        onError: (error: Error) => {
+            naviate("/");
+            toast.error("You are not allowed to acess Admin panel")
+        }
+    })
+
+    if (isProfileLoading) {
+        return (
+            <Loader />
+        )
+    }
+
     return (
         <div
             className="flex flex-col h-screen lg:flex-row">
