@@ -41,7 +41,7 @@ const Hero: React.FC = () => {
                     <span className="text-dark-light font-semibold italic mt-2 lg:mt-4 lg:text-sm xl:text-base">Popular Tags:</span>
                     <ul className="flex flex-wrap gap-x-2.5 gap-y-2.5 mt-3 lg:text-sm xl:text-base">
                         <li className="rounded-lg bg-primary bg-opacity-10 px-3 py-1.5 text-primary font-semibold">Design</li>
-                        <li className="rounded-lg bg-primary bg-opacity-10 px-3 py-1.5 text-primary font-semibold">User Eperience</li>
+                        <li className="rounded-lg bg-primary bg-opacity-10 px-3 py-1.5 text-primary font-semibold">User Experience</li>
                         <li className="rounded-lg bg-primary bg-opacity-10 px-3 py-1.5 text-primary font-semibold">User Interfaces</li>
                     </ul>
                 </div>
@@ -50,8 +50,8 @@ const Hero: React.FC = () => {
             </div>
 
 
-            <div className='hidden lg:block lg:1/2'>
-                <img className="w-full flex" src={images.HeroImage} alt="users are reading articles" />
+            <div className='hidden lg:block lg:w-1/2 mt-2'>
+                <img className="w-full flex h-full" src={images.jsImage} alt="users are reading articles" />
             </div>
         </section>
     )
