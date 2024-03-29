@@ -7,6 +7,7 @@ import * as types from "../shared/types"
 import { uploadFile } from "../middleware/uploadMiddleware";
 import { v4 as uuidv4 } from "uuid";
 
+
 const createPost = async (req: Request, res: express.Response, next: NextFunction) => {
     try {
 
@@ -91,11 +92,39 @@ const updatePost = async (req: Request, res: express.Response, next: NextFunctio
 
 const getAllPosts = async (req: Request, res: express.Response, next: NextFunction) => {
     try {
-        const posts = await Post.find({}).populate({
-            path: "user",
-            select: ["avatar", "name", "verified"]
+        const filter = req.query.searchKeyword;
+        let where: types.Where = {};
+        if (filter && typeof (filter) === 'string') {
+            where.title = { $regex: filter, $options: "i" };
+        }
+
+        let query = Post.find(where);
+        const page = parseInt(req?.query?.page as string) || 1;
+        const pageSize = parseInt(req?.query?.limit as string) || 10;
+        const skip = (page - 1) * pageSize;
+        const total = await Post.countDocuments();
+        const pages = Math.ceil(total / pageSize);
+
+        if (page > pages) {
+            const error = new Error("No page found")
+            next(error);
+            return;
+        }
+        const result = await query.skip(skip).limit(pageSize).populate([
+            {
+                path: "user",
+                select: ["name", "avatar", "verified"]
+            }
+        ]).sort({ updatedAt: "descending" });
+        res.header({
+            "x-filter": filter,
+            "x-totalcount": JSON.stringify(total),
+            "x-currentpage": JSON.stringify(page),
+            "x-pageSize": JSON.stringify(pageSize),
+            "x-totalpagecount": JSON.stringify(pages)
         })
-        return res.status(200).json(posts)
+        return res.status(200).json(result);
+
     } catch (err) {
         next(err)
     }
