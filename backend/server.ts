@@ -18,17 +18,20 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 })
 
-
-
-
-
 const app = express();
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors({
-    origin: process.env.FRONTED_URL
+    origin: process.env.FRONTED_URL,
+    exposedHeaders: ["x-totalpagecount",]
 }));
+app.use((_req: express.Request, res, next: express.NextFunction) => {
+    res.header('Content-Type', 'application/json;charset=UTF-8');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    next();
+});
+
 
 app.get('/', (req, res) => {
     res.status(200).json("SERVER IS RUNING...")
