@@ -105,17 +105,7 @@ const getAllPosts = async (req: Request, res: express.Response, next: NextFuncti
         const total = await Post.find(where).countDocuments();
         const pages = Math.ceil(total / pageSize);
 
-        if (page > pages) {
-            const error = new Error("No page found")
-            next(error);
-            return;
-        }
-        const result = await query.skip(skip).limit(pageSize).populate([
-            {
-                path: "user",
-                select: ["name", "avatar", "verified"]
-            }
-        ]).sort({ updatedAt: "descending" });
+
         res.header({
             "x-filter": filter,
             "x-totalcount": JSON.stringify(total),
@@ -123,6 +113,19 @@ const getAllPosts = async (req: Request, res: express.Response, next: NextFuncti
             "x-pageSize": JSON.stringify(pageSize),
             "x-totalpagecount": JSON.stringify(pages)
         })
+
+        if (page > pages) {
+
+            return res.json([])
+        }
+        const result = await query.skip(skip).limit(pageSize).populate([
+            {
+                path: "user",
+                select: ["name", "avatar", "verified"]
+            }
+        ]).sort({ updatedAt: "descending" });
+
+
         return res.status(200).json(result);
 
     } catch (err) {
