@@ -16,7 +16,7 @@ export const signup = async ({ name, email, password }: types.IRegisterFormData)
             throw new Error(error.message)
         } else {
             console.log('unexpected error: ', error);
-            throw new Error("An unexpected error occurred")
+            throw new Error("An unexpected error occurred");
         }
     }
 }

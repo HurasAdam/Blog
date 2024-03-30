@@ -46,7 +46,18 @@ export interface IComment {
 declare global {
     namespace Express {
         interface Request {
-            user?: string
+            user?: string,
+            query: {
+                searchKeyword?: string;
+                page?: string;
+                limit?: string;
+            }
         }
     }
+}
+
+
+export interface Where {
+    title?: { $regex: string, $options: string };
+    // inne możliwe właściwości
 }

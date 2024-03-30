@@ -1,11 +1,14 @@
 import axios from "axios";
 
-export const getAllPosts = async () => {
-
+export const getAllPosts = async (searchKeyword = "", page = 1, limit = 10) => {
     try {
-        const response = await axios.get("http://localhost:5000/api/posts");
-        return response.data;
+        const { data, headers } = await axios.get(
+            `http://localhost:5000/api/posts?searchKeyword=${searchKeyword}&page=${page}&limit=${limit}`
+        );
+        return { data, headers };
+
     } catch (error) {
+        console.log(error)
         if (axios.isAxiosError(error)) {
             console.log('error message: ', error.message);
             throw new Error(error.message)

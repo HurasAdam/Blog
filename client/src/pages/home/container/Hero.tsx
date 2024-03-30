@@ -6,8 +6,8 @@ import { images } from '../../../constants'
 const Hero: React.FC = () => {
     return (
         <section className='container mx-auto flex flex-col px-5 py-5 lg:flex-row'>
-            <div className='mt-10 lg:w-1/2'>
-                <h1 className='font-roboto text-3xl text-center font-bold text-dark-soft md:text-5xl lg:text-4xl xl:text-5xl lg:text-left lg:max-w-[540px]'>
+            <div className='mt-28 lg:w-1/2'>
+                <h1 className='font-roboto text-3xl text-center font-bold text-dark-soft md:text-5xl lg:text-4xl xl:text-6xl lg:text-left lg:max-w-[540px]'>
                     Read the most interesting articles
                 </h1>
                 <p className='text-dark-light mt-4 text-center md:text-xl lg:text-base xl:text-xl lg:text-left'>
@@ -51,7 +51,7 @@ const Hero: React.FC = () => {
 
 
             <div className='hidden lg:block lg:w-1/2 mt-2'>
-                <img className="w-full flex h-full" src={images.jsImage} alt="users are reading articles" />
+                <img className="w-full flex h-full" src={images.HeroImage3} alt="users are reading articles" />
             </div>
         </section>
     )

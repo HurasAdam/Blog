@@ -18,6 +18,7 @@ import { IRootUserState } from '../../types/index';
 
 
 
+
 const ArticleDetailPage: React.FC = () => {
     const { id } = useParams();
     const userState = useSelector((state: IRootUserState) => state.user.userInfo)
@@ -49,6 +50,7 @@ const ArticleDetailPage: React.FC = () => {
         },
 
     })
+
 
     if (isLoading) {
         return (
@@ -120,7 +122,7 @@ const ArticleDetailPage: React.FC = () => {
                 <div>
                     <SuggestedPosts
                         header="Latest Article"
-                        posts={postsData}
+                        posts={postsData?.data}
                         tags={postDetails?.tags}
                         className="mt-8 lg:mt-0 lg:max-w-xs"
                     />
