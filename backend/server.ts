@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 import { v2 as cloudinary } from "cloudinary"
 import "dotenv/config";
@@ -24,9 +24,15 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors({
     origin: process.env.FRONTED_URL,
-    exposedHeaders: ["x-totalpagecount",]
+    exposedHeaders: [
+        "x-totalpagecount",
+        "x-filter",
+        "x-totalcount",
+        "x-currentpage",
+        "x-pageSize"
+    ]
 }));
-app.use((_req: express.Request, res, next: express.NextFunction) => {
+app.use((_req: Request, res: Response, next: NextFunction) => {
     res.header('Content-Type', 'application/json;charset=UTF-8');
     res.header('Access-Control-Allow-Credentials', 'true');
     next();
@@ -36,8 +42,6 @@ app.use((_req: express.Request, res, next: express.NextFunction) => {
 app.get('/', (req, res) => {
     res.status(200).json("SERVER IS RUNING...")
 })
-
-
 
 
 app.use('/api/users', userRoutes);

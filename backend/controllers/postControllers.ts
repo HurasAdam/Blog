@@ -102,7 +102,7 @@ const getAllPosts = async (req: Request, res: express.Response, next: NextFuncti
         const page = parseInt(req?.query?.page as string) || 1;
         const pageSize = parseInt(req?.query?.limit as string) || 10;
         const skip = (page - 1) * pageSize;
-        const total = await Post.countDocuments();
+        const total = await Post.find(where).countDocuments();
         const pages = Math.ceil(total / pageSize);
 
         if (page > pages) {
