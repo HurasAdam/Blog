@@ -1,13 +1,18 @@
-import { useQuery } from "@tanstack/react-query";
-import { getAllPosts } from "../../../services/postApi";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { deletePost, getAllPosts } from "../../../services/postApi";
 import images from "../../../constants/images"
 import { useEffect, useState } from "react";
 import Pagination from "../../../components/Pagination";
+import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 
 
 const ManagePosts: React.FC = () => {
 
+    const queryClient = useQueryClient();
+    const userState = useSelector((state) => state?.user?.userInfo);
     const [searchKeyword, setSearchKeyword] = useState<string>("");
     const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -18,7 +23,25 @@ const ManagePosts: React.FC = () => {
 
     })
 
+    const { mutate: mutateDeletePost, isLoading: isLoadingDeletePost } = useMutation({
+        mutationFn: ({ postId, token }) => {
+            return deletePost({ postId, token })
+        },
+        onSuccess: (data) => {
+            queryClient.invalidateQueries("posts")
+            toast.success("Post deleted sucessfully")
+        },
+        onError: (error: Error) => {
+            toast.error(error.message)
+        }
 
+
+    })
+
+    const deletePostHandler = ({ postId, token }): void => {
+        mutateDeletePost({ postId, token })
+
+    }
 
     const searchKeywordHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const { value } = e.target;
@@ -90,6 +113,12 @@ const ManagePosts: React.FC = () => {
                                                 Loading...
                                             </td>
                                         </tr>
+                                    ) : posts?.data.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={5} className="text-center py-10 w-full">
+                                                No posts found
+                                            </td>
+                                        </tr>
                                     ) : (
                                         posts?.data.map((post) => {
                                             return (
@@ -134,10 +163,16 @@ const ManagePosts: React.FC = () => {
                                                             }) : "No tags"}
                                                         </div>
                                                     </td>
-                                                    <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
-                                                        <a href="/" className="text-indigo-600 hover:text-indigo-900">
+                                                    <td className="px-5 py-5 text-sm bg-white border-b border-gray-200 space-x-5">
+                                                        <button
+                                                            onClick={() => deletePostHandler({ postId: post?._id, token: userState?.token })}
+                                                            disabled={isLoadingDeletePost}
+                                                            type="button"
+                                                            className="text-red-600 hover:red-900 disabled:opacity-70 disabled:cursor-not-allowed"
+                                                        >Delete</button>
+                                                        <Link to="/" className="text-green-600 hover:text-green-900">
                                                             Edit
-                                                        </a>
+                                                        </Link>
                                                     </td>
                                                 </tr>
                                             )

@@ -31,7 +31,7 @@ const Articles: React.FC = () => {
                             />
                         )
                     })
-                ) : isError ? <ErrorMessage message="Something went wrong..." /> : (posts.map((post) => {
+                ) : isError ? <ErrorMessage message="Something went wrong..." /> : (posts?.data.map((post) => {
                     return (
                         <ArticleCard
                             key={post._id}
