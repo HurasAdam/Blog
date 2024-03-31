@@ -50,7 +50,7 @@ return createPost({
    }
 })
 
-    const { handleSubmit, register, formState: { errors },watch } = formMethods;
+    const { handleSubmit, register, formState: { errors } } = formMethods;
 
   
   
@@ -69,20 +69,14 @@ return createPost({
     }
 
   
-const Image = watch("postPicture")
-    const onSubmit = handleSubmit((data)=> {
+const onSubmit = handleSubmit((data)=> {
        
-
-
 const formData = new FormData();
 formData.append("title",data?.title);
 formData.append("description",data?.description);
-
 formData.append("postPicture",data?.postPicture[0]);
 
-
-     console.log(data)
-    //  createPostMutation(formData);
+     createPostMutation(formData);
     });
 
 
