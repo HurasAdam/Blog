@@ -56,3 +56,25 @@ export const deletePost = async ({ postId, token }): void => {
         }
     }
 }
+
+export const updatePost = async ({ updatedData, postId, token }): void => {
+
+    try {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+
+        const { data } = await axios.put(`http://localhost:5000/api/posts/${postId}`, updatedData, config)
+        return data
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.log('error message: ', error.message);
+            throw new Error(error.message)
+        } else {
+            console.log('unexpected error: ', error);
+            throw new Error("An unexpected error occurred")
+        }
+    }
+}

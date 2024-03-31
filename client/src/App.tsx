@@ -10,8 +10,10 @@ import ProfilePage from "./pages/profile/ProfilePage";
 import AdminLayout from "./pages/Admin/AdminLayout";
 import Admin from "./pages/Admin/views/Admin";
 import Comments from "./pages/Admin/views/Comments";
-import NewPosts from "./pages/Admin/views/NewPosts";
+import NewPost from "./pages/Admin/views/NewPosts";
 import ManagePosts from "./pages/Admin/views/ManagePosts";
+import EditPost from "./pages/Admin/views/EditPost";
+
 
 
 function App() {
@@ -28,8 +30,9 @@ function App() {
         <Route path="/admin" element={<AdminLayout />} >
           <Route index element={<Admin />} />
           <Route path="comments" element={<Comments />} />
-          <Route path="posts/new" element={<NewPosts />} />
+          <Route path="posts/new" element={<NewPost />} />
           <Route path="posts/manage" element={<ManagePosts />} />
+          <Route path="posts/manage/edit/:id" element={<EditPost />} />
         </Route>
       </Routes>
       <Toaster />

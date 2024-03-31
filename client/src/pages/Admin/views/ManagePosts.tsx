@@ -170,7 +170,7 @@ const ManagePosts: React.FC = () => {
                                                             type="button"
                                                             className="text-red-600 hover:red-900 disabled:opacity-70 disabled:cursor-not-allowed"
                                                         >Delete</button>
-                                                        <Link to="/" className="text-green-600 hover:text-green-900">
+                                                        <Link to={`/admin/posts/manage/edit/${post._id}`} className="text-green-600 hover:text-green-900">
                                                             Edit
                                                         </Link>
                                                     </td>
