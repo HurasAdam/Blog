@@ -13,7 +13,7 @@ const createPost = async (
   next: NextFunction
 ) => {
   try {
-    const { title, caption, description } = req.body;
+    const { title, caption, description, categories, tags } = req.body;
     const file = req.file;
     let photo;
 
@@ -29,6 +29,8 @@ const createPost = async (
     const post = new Post({
       title,
       caption,
+      categories,
+      tags,
       description: description,
       photo: photo || "",
       user: req.user,
@@ -132,6 +134,14 @@ const getAllPosts = async (
           path: "user",
           select: ["name", "avatar", "verified"],
         },
+        {
+          path: "categories",
+          select: ["name"],
+        },
+        {
+          path: "tags",
+          select: ["name"],
+        },
       ])
       .sort({ updatedAt: "descending" });
 
@@ -154,6 +164,15 @@ const getPost = async (
         path: "user",
         select: ["name", "avatar"],
       },
+      {
+        path: "tags",
+        select: ["name"],
+      },
+      {
+        path: "categories",
+        select: ["name"],
+      },
+
       {
         path: "comments",
         match: {

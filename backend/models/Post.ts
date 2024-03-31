@@ -9,8 +9,8 @@ const PostSchema = new Schema<types.IPost>(
     description: { type: String, required: true },
     user: { type: Schema.Types.ObjectId, ref: "User" },
     photo: { type: String, required: false },
-    tags: { type: [String] },
-    categories: [{ type: Schema.Types.ObjectId, ref: "PostCategories" }],
+    tags: [{ type: Schema.Types.ObjectId, ref: "Tag" }],
+    categories: [{ type: Schema.Types.ObjectId, ref: "Category" }],
   },
   { timestamps: true, toJSON: { virtuals: true } }
 );

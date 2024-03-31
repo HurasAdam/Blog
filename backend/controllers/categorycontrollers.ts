@@ -43,7 +43,7 @@ const getAllCategories = async (
 
     let query = Category.find(where);
     const page = parseInt(req?.query?.page as string) || 1;
-    const pageSize = parseInt(req?.query?.limit as string) || 1;
+    const pageSize = parseInt(req?.query?.limit as string) || 100;
     const skip = (page - 1) * pageSize;
     const total = await Category.find(where).countDocuments();
     const pages = Math.ceil(total / pageSize);
