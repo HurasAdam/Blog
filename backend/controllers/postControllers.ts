@@ -166,7 +166,7 @@ const getPost = async (
       },
       {
         path: "tags",
-        select: ["name"],
+        select: ["name", "color"],
       },
       {
         path: "categories",

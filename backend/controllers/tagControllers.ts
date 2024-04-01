@@ -5,7 +5,7 @@ import Tag from "../models/PostTags";
 
 const createTag = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { name } = req.body;
+    const { name, color } = req.body;
 
     const tag = await Tag.findOne({ name });
 
@@ -16,6 +16,8 @@ const createTag = async (req: Request, res: Response, next: NextFunction) => {
 
     const newTag = new Tag({
       name,
+      createdBy: req?.user,
+      color: color || "blue-500",
     });
 
     const createdTag = await newTag.save();
@@ -55,6 +57,7 @@ const getAllTags = async (req: Request, res: Response, next: NextFunction) => {
     const result = await query
       .skip(skip)
       .limit(pageSize)
+      .populate([{ path: "createdBy", select: ["name", "avatar"] }])
       .sort({ updatedAt: "descending" });
 
     return res.status(200).json(result);
