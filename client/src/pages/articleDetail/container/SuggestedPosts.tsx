@@ -52,10 +52,12 @@ const SuggestedPosts: React.FC = ({ className, header, posts = [], tags }) => {
       ) : (
         <div className="flex flex-wrap gap-x-2 gap-y-2 mt-4">
           {tags.map((item, index) => {
+            console.log("item");
+            console.log(item);
             return (
               <Link
                 key={index}
-                className="inline-block rounded-md px-3 py-1.5 bg-primary font-roboto text-xs text-white md:text-sm"
+                className={`inline-block rounded-md px-3 py-1.5 bg-${item?.color} font-roboto text-xs text-white md:text-sm`}
                 to="/"
               >
                 {item?.name}

@@ -221,7 +221,7 @@ const NewPost: React.FC = () => {
                           },
                         })}
                       />
-                      {tag?.name}
+                      {`# ${tag?.name}`}
                     </label>
                   );
                 })}
@@ -233,12 +233,16 @@ const NewPost: React.FC = () => {
             )}
           </div>
           <div>
-            <label htmlFor="postPicture" className="text-sm ">
+            <label htmlFor="postPicture" className="text-sm cursor-pointer  ">
               {postPicture ? (
                 <img src={URL.createObjectURL(postPicture)} />
               ) : (
-                <div className="w-full min-h-[200px] bg-blue-50/50 flex justify-center items-center">
+                <div className="w-full  min-h-[200px] bg-blue-50/50 flex flex-col justify-center items-center border-[2px] border-dashed rounded-lg ">
                   <HiOutlineCamera className="w-16 h-auto text-primary" />
+                  <span className="font-semibold text-slate-900 text-base">
+                    Add Photo here
+                  </span>
+                  <span className="text-xs text-slate-500">PNG, JPG, JPEG</span>
                 </div>
               )}
             </label>
