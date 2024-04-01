@@ -13,7 +13,8 @@ const createPost = async (
   next: NextFunction
 ) => {
   try {
-    const { title, caption, description, categories, tags } = req.body;
+    const { title, caption, description, categories, tags, readingTime } =
+      req.body;
     const file = req.file;
     let photo;
 
@@ -32,6 +33,7 @@ const createPost = async (
       categories,
       tags,
       description: description,
+      readingTime,
       photo: photo || "",
       user: req.user,
     });

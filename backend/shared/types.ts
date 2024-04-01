@@ -23,6 +23,7 @@ export interface IPost {
   title: string;
   caption: string;
   description: string;
+  readingTime: string;
   user: Types.ObjectId;
   photo: string;
   tags: string[];

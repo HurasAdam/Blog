@@ -15,6 +15,7 @@ interface IOnSubmitProps {
   title: string;
   description: string;
   categories: string[];
+  readingTime: string;
   tags: string[];
   postPicture: FileList | null;
 }
@@ -28,6 +29,7 @@ const NewPost: React.FC = () => {
     defaultValues: {
       title: "",
       description: "",
+      readingTime: "",
       categories: [],
       tags: [],
       postPicture: {},
@@ -82,10 +84,12 @@ const NewPost: React.FC = () => {
   };
 
   const onSubmit = handleSubmit((data) => {
-    const { title, description, postPicture, tags, categories } = data;
+    const { title, description, postPicture, tags, categories, readingTime } =
+      data;
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
+    formData.append("readingTime", readingTime);
     formData.append("postPicture", postPicture ? postPicture[0] : "");
 
     categories.forEach((category, index) => {
@@ -95,10 +99,7 @@ const NewPost: React.FC = () => {
     tags.forEach((tag, index) => {
       formData.append(`tags[${index}]`, tag);
     });
-
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
+    console.log(data);
     createPostMutation(formData);
   });
 
@@ -136,7 +137,7 @@ const NewPost: React.FC = () => {
           </div>
           <div>
             <label
-              htmlFor="title"
+              htmlFor="description"
               className="text-sm font-semibold text-gray-700  block mb-1.5"
             >
               Description
@@ -147,7 +148,7 @@ const NewPost: React.FC = () => {
               })}
               type="text"
               className="border rounded w-full py-3  lg:py-1.5 xl:py-1  px-2 font-normal"
-              id="title"
+              id="description"
               placeholder="here enter post description"
             />
             {errors?.description && (
@@ -157,10 +158,32 @@ const NewPost: React.FC = () => {
             )}
           </div>
           <div>
-            <span
-              htmlFor=""
-              className="text-sm block font-semibold text-gray-700"
+            <label
+              htmlFor="readingTime"
+              className="text-sm font-semibold text-gray-700  block mb-1.5"
             >
+              Estimated Reading Time{" "}
+              <span className="text-xs text-slate-400">(in minutes)</span>
+            </label>
+            <input
+              {...register("readingTime", {
+                required: "estimated reading time is required",
+              })}
+              type="number"
+              min={2}
+              className="border rounded w-full py-3  lg:py-1.5 xl:py-1  px-2 font-normal"
+              id="readingTime"
+              placeholder="here enter estimated post reading time "
+            />
+            {errors?.readingTime && (
+              <span className="text-xs text-red-500 px-1 font-semibold">
+                {errors.readingTime?.message}
+              </span>
+            )}
+          </div>
+
+          <div>
+            <span className="text-sm block font-semibold text-gray-700">
               Categories
             </span>
             <div className=" grid-row-5 gap-3 md:grid-cols-3 md:gap-3 lg:grid">

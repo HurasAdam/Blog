@@ -74,20 +74,35 @@ const ArticleDetailPage: React.FC = () => {
             src={postDetails?.photo ? postDetails?.photo : images.Post3}
             alt={postDetails?.title}
           />
-
-          <div className="mt-4 flex gap-2">
-            {postDetails?.categories.map((category) => {
-              return (
-                <Link
-                  to={`/blog?category=${category?.name}`}
-                  className="text-primary text-sm font-roboto inline-block  md:text-base"
-                >
-                  {category?.name}
-                </Link>
-              );
-            })}
+          <div className="flex justify-between">
+            <div className="mt-4 flex  gap-2">
+              {postDetails?.categories.map((category) => {
+                return (
+                  <Link
+                    to={`/blog?category=${category?.name}`}
+                    className="text-primary text-sm font-roboto inline-block  md:text-base"
+                  >
+                    {category?.name}
+                  </Link>
+                );
+              })}
+            </div>
+            <div className="flex items-end md:items-center gap-x-3">
+              <span className="font-semibold font-roboto  text-slate-500 text-sm">
+                {new Date(postDetails?.createdAt).toLocaleString("en-US", {
+                  month: "long",
+                })}{" "}
+                {new Date(postDetails?.createdAt).getDate()},{" "}
+                {new Date(postDetails?.createdAt).toLocaleString("en-US", {
+                  year: "numeric",
+                })}
+              </span>
+              <span className=" bg-slate-300 w-1.5 h-1.5 rounded-full "></span>
+              <span className=" text-gray-400 italic text-sm">
+                {postDetails?.readingTime} min read
+              </span>
+            </div>
           </div>
-
           <h1 className="text-xl font-medium font-roboto mt-4 text-dark-hard md:text-[26px]">
             {postDetails?.title}
           </h1>

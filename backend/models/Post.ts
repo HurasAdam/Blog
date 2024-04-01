@@ -7,6 +7,7 @@ const PostSchema = new Schema<types.IPost>(
     title: { type: String, required: true },
     caption: { type: String, requied: true },
     description: { type: String, required: true },
+    readingTime: { type: String, required: true },
     user: { type: Schema.Types.ObjectId, ref: "User" },
     photo: { type: String, required: false },
     tags: [{ type: Schema.Types.ObjectId, ref: "Tag" }],
