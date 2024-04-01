@@ -1,5 +1,4 @@
 import express, { Request, Response, NextFunction } from "express";
-import dotenv from "dotenv";
 import { v2 as cloudinary } from "cloudinary";
 import "dotenv/config";
 import connectDB from "./config/db";

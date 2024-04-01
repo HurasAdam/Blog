@@ -1,7 +1,6 @@
 import express from "express";
 import * as tagController from "../controllers/tagControllers";
 import { adminGuard, authGuard } from "../middleware/authMiddleware";
-import { uploadFile } from "../middleware/uploadMiddleware";
 const router = express.Router();
 
 router.get("/", authGuard, adminGuard, tagController.getAllTags);

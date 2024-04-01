@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import Category from "../models/PostCategories";
 import * as types from "../shared/types";
 import Tag from "../models/PostTags";
 

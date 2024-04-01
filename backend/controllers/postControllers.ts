@@ -1,11 +1,8 @@
 import express, { Request, Response, NextFunction } from "express";
 import cloudinary from "cloudinary";
-import multer, { FileFilterCallback } from "multer";
 import Post from "../models/Post";
 import Comment from "../models/Comment";
 import * as types from "../shared/types";
-import { uploadFile } from "../middleware/uploadMiddleware";
-import { v4 as uuidv4 } from "uuid";
 
 const createPost = async (
   req: Request,
