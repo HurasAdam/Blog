@@ -63,10 +63,14 @@ declare global {
 
 export interface IPostWhere {
   title?: { $regex: string; $options: string };
-  // inne możliwe właściwości
+}
+
+export interface ICommentWhere {
+  check?: boolean | undefined;
+  user?: {};
+  title?: { $regex: string; $options: string } | undefined;
 }
 
 export interface ICategoryWhere {
   name?: { $regex: string; $options: string };
-  // inne możliwe właściwości
 }
