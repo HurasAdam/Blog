@@ -34,6 +34,8 @@ export interface IPostCategory {
 }
 export interface IPostTag {
   name: string;
+  color: string;
+  createdBy: Types.ObjectId;
 }
 
 export interface IComment {

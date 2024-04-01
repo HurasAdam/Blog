@@ -1,8 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
-import Home from "./pages/home/Home"
-import "./App.css"
+import Home from "./pages/home/Home";
+import "./App.css";
 import ArticleDetailPage from "./pages/articleDetail/ArticleDetailPage";
 import RegisterPage from "./pages/register/RegisterPage";
 import LoginPage from "./pages/login/LoginPage";
@@ -13,12 +13,10 @@ import Comments from "./pages/Admin/views/Comments";
 import NewPost from "./pages/Admin/views/NewPosts";
 import ManagePosts from "./pages/Admin/views/ManagePosts";
 import EditPost from "./pages/Admin/views/EditPost";
-
-
+import ManageTags from "./pages/Admin/views/ManageTags";
+import NewTag from "./pages/Admin/views/NewTag";
 
 function App() {
-
-
   return (
     <div className="App font-opensans">
       <Routes>
@@ -27,17 +25,19 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/admin" element={<AdminLayout />} >
+        <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Admin />} />
           <Route path="comments" element={<Comments />} />
           <Route path="posts/new" element={<NewPost />} />
+          <Route path="tags/new" element={<NewTag />} />
           <Route path="posts/manage" element={<ManagePosts />} />
+          <Route path="tags/manage" element={<ManageTags />} />
           <Route path="posts/manage/edit/:id" element={<EditPost />} />
         </Route>
       </Routes>
       <Toaster />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

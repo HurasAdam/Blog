@@ -1,0 +1,16 @@
+export const COLORS = [
+  "blue-400",
+  "blue-500",
+  "indigo-500",
+  "indigo-800",
+  "red-500",
+  "red-600",
+  "orange-600",
+  "amber-500",
+  "yellow-500",
+  "green-500",
+  "green-600",
+  "teal-500",
+  "fuchsia-400",
+  "fuchsia-600",
+];
