@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const getTags = async ({ token }) => {
+const getTags = async ({ token, searchKeyword = "", page = 1, limit = 10 }) => {
   try {
     const config = {
       headers: {
@@ -8,7 +8,7 @@ const getTags = async ({ token }) => {
       },
     };
 
-    const { data } = await axios.get("http://localhost:5000/api/tag", config);
+    const { data } = await axios.get(`http://localhost:5000/api/tag?searchKeyword=${searchKeyword}&page=${page}&limit=${limit}`, config);
     return data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

@@ -19,9 +19,10 @@ const ManageTags: React.FC = () => {
     data: tags,
     isLoading,
     isFetching,
+    refetch
   } = useQuery({
     queryFn: () => {
-      return getTags({ token: userState?.token });
+      return getTags({ token: userState?.token, searchKeyword: searchKeyword, currentPage: currentPage });
     },
     queryKey: ["tags"],
     refetchOnWindowFocus: false,
@@ -77,7 +78,7 @@ const ManageTags: React.FC = () => {
                     type="text"
                     id='"form-subscribe-Filter'
                     className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-                    placeholder="Post title..."
+                    placeholder="Tag name..."
                     onChange={searchKeywordHandler}
                     value={searchKeyword}
                   />
@@ -106,7 +107,7 @@ const ManageTags: React.FC = () => {
                       scope="col"
                       className="px-5 py-3 text-sm font-normal text-left text-gray-800 uppercase bg-white border-b border-gray-200"
                     >
-                      Category
+                      Created by
                     </th>
                     <th
                       scope="col"
