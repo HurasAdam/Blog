@@ -44,6 +44,7 @@ const createComment = async ({
 const getAllComments = async ({
   searchKeyword = "",
   page = 1,
+  commentStatus,
   limit = 10,
   token,
 }) => {
@@ -55,7 +56,7 @@ const getAllComments = async ({
     };
 
     const { data } = await axios.get(
-      `http://localhost:5000/api/comments?author=${searchKeyword}&page=${page}&limit=${limit}`,
+      `http://localhost:5000/api/comments?author=${searchKeyword}&checked=${commentStatus}&page=${page}&limit=${limit}`,
       config
     );
     return data;

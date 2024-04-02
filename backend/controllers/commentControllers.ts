@@ -106,7 +106,7 @@ const getAllComments = async (
       where.user = { $in: selectedUserId };
     }
 
-    if (checkedParam !== undefined) {
+    if (checkedParam !== "") {
       const checked = checkedParam === "true";
       where.check = checked;
     }

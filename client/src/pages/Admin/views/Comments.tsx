@@ -16,6 +16,7 @@ const Comments: React.FC = () => {
   const userState = useSelector((state) => state?.user?.userInfo);
   const [searchKeyword, setSearchKeyword] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [commentStatus, setCommentStatus] = useState("");
 
   const {
     data: comments,
@@ -27,6 +28,7 @@ const Comments: React.FC = () => {
       return getAllComments({
         searchKeyword,
         currentPage,
+        commentStatus,
         token: userState?.token,
       });
     },
@@ -77,6 +79,10 @@ const Comments: React.FC = () => {
     setSearchKeyword(value);
   };
 
+  const handleSelectChange = (event) => {
+    setCommentStatus(event.target.value);
+  };
+
   const submitSearchKeywordHandler = (
     e: React.ChangeEvent<HTMLInputElement>
   ): void => {
@@ -85,13 +91,25 @@ const Comments: React.FC = () => {
     refetch();
   };
 
+  useEffect(() => {
+    refetch();
+  }, [commentStatus]);
+
   return (
     <div>
       <h1 className="text-2xl font-semibold">Manage Comments</h1>
       <div className="w-full px-4 mx-auto ">
         <div className="py-8">
           <div className="flex flex-row justify-between w-full mb-1 sm:mb-0">
-            <h2 className="text-2xl leading-tight">Comments</h2>
+            <div className=" flex items-center gap-x-5">
+              <h2 className="text-2xl leading-tight">Comments</h2>
+
+              <select name="" id="" onChange={handleSelectChange}>
+                <option value="">overall</option>
+                <option value={"true"}>checked</option>
+                <option value={"false"}>pending</option>
+              </select>
+            </div>
             <div className="text-end">
               <form
                 onSubmit={submitSearchKeywordHandler}
