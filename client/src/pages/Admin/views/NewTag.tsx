@@ -129,7 +129,7 @@ const NewTag: React.FC = () => {
             type="submit"
             className="w-fit bg-green-500 text-white font-semibold rounded-lg px-2 py-1 mt-5"
           >
-            Create Post
+            Create Tag
           </button>
         </form>
       </section>

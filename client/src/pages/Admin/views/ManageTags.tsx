@@ -24,6 +24,7 @@ const ManageTags: React.FC = () => {
       return getTags({ token: userState?.token });
     },
     queryKey: ["tags"],
+    refetchOnWindowFocus: false,
   });
 
   const { mutate: mutateDeletePost, isLoading: isLoadingDeletePost } =
