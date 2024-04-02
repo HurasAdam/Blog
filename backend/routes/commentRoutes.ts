@@ -8,5 +8,11 @@ router.get("/", authGuard, adminGuard, commentController.getAllComments);
 router.post("/", authGuard, commentController.createComment);
 router.put("/:id", authGuard, commentController.updateComment);
 router.delete("/:id", authGuard, commentController.deleteComment);
+router.post(
+  "/approve/:id",
+  authGuard,
+  adminGuard,
+  commentController.approveComment
+);
 
 export default router;

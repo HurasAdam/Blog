@@ -115,4 +115,34 @@ const deleteComment = async ({ token, commentId }) => {
   }
 };
 
-export { createComment, updateComment, deleteComment, getAllComments };
+const approveComment = async ({ commentId, token }) => {
+  console.log(token);
+  try {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await axios.post(
+      `http://localhost:5000/api/comments/approve/${commentId}`,
+      {},
+      config
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.message);
+    } else {
+      throw new Error("An unexpected error occurred");
+    }
+  }
+};
+
+export {
+  createComment,
+  updateComment,
+  deleteComment,
+  getAllComments,
+  approveComment,
+};

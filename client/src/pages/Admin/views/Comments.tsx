@@ -8,7 +8,8 @@ import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getTags } from "../../../services/tagsApi";
-import { getAllComments } from "../../../services/commentApi";
+import { IoMdCheckmark } from "react-icons/io";
+import { approveComment, getAllComments } from "../../../services/commentApi";
 
 const Comments: React.FC = () => {
   const queryClient = useQueryClient();
@@ -47,8 +48,26 @@ const Comments: React.FC = () => {
       },
     });
 
-  const deletePostHandler = ({ postId, token }): void => {
-    mutateDeletePost({ postId, token });
+  const { mutate: mutateApproveComment, isLoading: isLoadingCommentAprove } =
+    useMutation({
+      mutationFn: ({ commentId, token }) => {
+        return approveComment({ commentId, token });
+      },
+      onSuccess: (data) => {
+        queryClient.invalidateQueries("comments");
+        toast.success("Comment accepted sucessfully");
+      },
+      onError: (error: Error) => {
+        toast.error(error.message);
+      },
+    });
+
+  const approveCommentHandler = ({ commentId, token }): void => {
+    mutateApproveComment({ commentId, token });
+  };
+
+  const deletePostHandler = ({ commentId, token }): void => {
+    mutateDeletePost({ commentId, token });
   };
 
   const searchKeywordHandler = (
@@ -112,12 +131,6 @@ const Comments: React.FC = () => {
                       scope="col"
                       className="px-5 py-3 text-sm font-normal text-left text-gray-800 uppercase bg-white border-b border-gray-200"
                     >
-                      Checked
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-5 py-3 text-sm font-normal text-left text-gray-800 uppercase bg-white border-b border-gray-200"
-                    >
                       Created at
                     </th>
                     <th
@@ -125,6 +138,12 @@ const Comments: React.FC = () => {
                       className="px-5 py-3 text-sm font-normal text-left text-gray-800 uppercase bg-white border-b border-gray-200"
                     >
                       Author
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-5 py-3 text-sm font-normal text-left text-gray-800 uppercase bg-white border-b border-gray-200"
+                    >
+                      Check
                     </th>
                     <th
                       scope="col"
@@ -176,19 +195,6 @@ const Comments: React.FC = () => {
                             </div>
                           </td>
                           <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
-                            <p className="text-gray-900 whitespace-no-wrap text-xs">
-                              {comment?.check === true ? (
-                                <span className="text-green-600 font-semibold ">
-                                  Accepted
-                                </span>
-                              ) : (
-                                <span className="text-rose-500 font-semibold">
-                                  Pending
-                                </span>
-                              )}
-                            </p>
-                          </td>
-                          <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
                             <p className="text-gray-900 whitespace-no-wrap">
                               {new Date(comment?.createdAt).toLocaleDateString(
                                 "en-US",
@@ -207,6 +213,31 @@ const Comments: React.FC = () => {
                                 src={comment?.user?.avatar || images?.userImage}
                                 alt="avatar"
                               />
+                            </div>
+                          </td>
+                          <td className="px-5 py-5 text-sm bg-white border-b border-gray-200 ">
+                            <div className="text-gray-900 whitespace-no-wrap text-xs">
+                              {comment?.check === true ? (
+                                <button
+                                  disabled={comment?.check}
+                                  className="bg-emerald-600  text-white font-bold py-2 px-4 rounded-lg "
+                                >
+                                  Accepted
+                                </button>
+                              ) : (
+                                <button
+                                  className="bg-blue-400 hover:bg-blue-700 text-slate-100 font-bold py-2 px-4 rounded-lg transition ease-in-out delay-0.4 "
+                                  disabled={comment?.check}
+                                  onClick={() =>
+                                    approveCommentHandler({
+                                      commentId: comment?._id,
+                                      token: userState?.token,
+                                    })
+                                  }
+                                >
+                                  Confirm
+                                </button>
+                              )}
                             </div>
                           </td>
                           <td className="px-5 py-5 text-sm bg-white border-b border-gray-200 space-x-5">

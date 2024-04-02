@@ -3,6 +3,7 @@ import Post from "../models/Post";
 import Comment from "../models/Comment";
 import * as types from "../shared/types";
 import User from "../models/User";
+import { error } from "console";
 
 const createComment = async (
   req: Request,
@@ -151,4 +152,31 @@ const getAllComments = async (
   }
 };
 
-export { createComment, updateComment, deleteComment, getAllComments };
+const approveComment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+
+    const comment = await Comment.findById({ _id: id });
+    if (!comment) {
+      const error = new Error("Comment not found");
+      next(error);
+      return;
+    }
+    comment.check = true;
+    const confirmedComment = comment.save();
+    return res.status(200).json(confirmedComment);
+  } catch (err) {
+    next(err);
+  }
+};
+export {
+  createComment,
+  updateComment,
+  deleteComment,
+  getAllComments,
+  approveComment,
+};
