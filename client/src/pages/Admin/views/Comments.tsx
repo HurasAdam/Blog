@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { getTags } from "../../../services/tagsApi";
 import { IoMdCheckmark } from "react-icons/io";
 import { approveComment, getAllComments } from "../../../services/commentApi";
+import Popup from "../../../components/shared/Popup";
 
 const Comments: React.FC = () => {
   const queryClient = useQueryClient();
@@ -17,6 +18,8 @@ const Comments: React.FC = () => {
   const [searchKeyword, setSearchKeyword] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [commentStatus, setCommentStatus] = useState("");
+  const [popupContent, setPopupContent] = useState({});
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const {
     data: comments,
@@ -91,6 +94,16 @@ const Comments: React.FC = () => {
     refetch();
   };
 
+  const handlePopupOpen = (value: boolean, content) => {
+    setPopupContent(content);
+    setIsPopupOpen(value);
+  };
+
+  const handlePopupClose = (value) => {
+    setPopupContent("");
+    setIsPopupOpen(value);
+  };
+  console.log(popupContent);
   useEffect(() => {
     refetch();
   }, [commentStatus]);
@@ -258,7 +271,7 @@ const Comments: React.FC = () => {
                               )}
                             </div>
                           </td>
-                          <td className="px-5 py-5 text-sm bg-white border-b border-gray-200 space-x-5">
+                          <td className=" gap-4 px-5 py-5 text-sm bg-white border-b border-gray-200 space-x-5 text-center ">
                             <button
                               onClick={() =>
                                 deletePostHandler({
@@ -278,6 +291,19 @@ const Comments: React.FC = () => {
                             >
                               Edit
                             </Link>
+                            <button
+                              onClick={() => {
+                                handlePopupOpen(true, {
+                                  text: comment?.description,
+                                  name: comment?.user.name,
+                                  createdAt: comment?.createdAt,
+                                  avatar: comment?.user?.avatar,
+                                });
+                              }}
+                              className="bg-violet-600 text-slate-200 px-2 py-1 rounded-lg text-sm font-semibold"
+                            >
+                              View
+                            </button>
                           </td>
                         </tr>
                       );
@@ -296,6 +322,28 @@ const Comments: React.FC = () => {
           </div>
         </div>
       </div>
+      <Popup handlePopupClose={handlePopupClose} isPopupOpen={isPopupOpen}>
+        <div className="flex flex-col md:flex-row px-5 h-fit ">
+          <div className="flex flex-col md:pt-10">
+            <img
+              className="w-40 h-auto mx-auto rounded-lg md:min-w-[100px] md-h-auto lg:min-w-[140px]"
+              src={popupContent?.avatar || images?.userImage}
+            />
+            <span className="border-2 text-center">{popupContent?.name}</span>
+          </div>
+          <div className="flex flex-col gap-5 w-full ">
+            <span className="text-blue-500 text-sm font-semibold font-roboto text-right">
+              {" "}
+              {new Date(popupContent?.createdAt).toLocaleDateString("en-US", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })}
+            </span>
+            <span className="px-4 md:px-10 ">{popupContent?.text}</span>
+          </div>
+        </div>
+      </Popup>
     </div>
   );
 };
