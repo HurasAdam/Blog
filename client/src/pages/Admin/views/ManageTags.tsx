@@ -156,7 +156,7 @@ const ManageTags: React.FC = () => {
                                     />
                                   ) : (
                                     <FaHashtag
-                                      className={`w-6 h-auto text-${tag?.color}`}
+                                      className="w-6 h-auto text-indigo-500"
                                     />
                                   )}
                                 </a>
@@ -197,7 +197,7 @@ const ManageTags: React.FC = () => {
                           <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
                             <div className="flex gap-x-1.5 gap-y-1.5 flex-wrap">
                               <span
-                                className={`bg-${tag?.color}  p-2.5 rounded-[5px] font-bold text-white `}
+                                className={`${tag?.color} p-2.5 rounded-[5px] font-bold text-white `}
                               ></span>
                             </div>
                           </td>

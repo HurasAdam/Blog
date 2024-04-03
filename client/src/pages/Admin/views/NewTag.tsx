@@ -14,6 +14,7 @@ import { COLORS } from "../../../constants/colors";
 
 interface IOnSubmitProps {
   title: string;
+  color: string;
   description: string;
   categories: string[];
   tags: string[];
@@ -99,8 +100,8 @@ const NewTag: React.FC = () => {
               {COLORS.map((color, index) => {
                 return (
                   <label
-                    htmlFor={index}
-                    className={`bg-${color} text-sm flex gap-1 text-gray-700 cursor-pointer rounded p-4 mt-3 truncate md:mt-2`}
+                    key={index}
+                    className={`${color} text-sm flex gap-1 text-gray-700 cursor-pointer rounded p-4 mt-3 truncate md:mt-2`}
                   >
                     <input
                       type="radio"
@@ -113,7 +114,7 @@ const NewTag: React.FC = () => {
                         },
                       })}
                     />
-                    <span className="text-slate-200 font-bold"># {}</span>
+                    <span className="text-slate-200 font-bold"># { }</span>
                   </label>
                 );
               })}
