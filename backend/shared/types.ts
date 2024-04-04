@@ -74,3 +74,7 @@ export interface ICommentWhere {
 export interface ICategoryWhere {
   name?: { $regex: string; $options: string };
 }
+export interface IUserWhere {
+  $or?: { name?: { $regex: string; $options: string }; email?: { $regex: string; $options: string } }[];
+  name?: { $regex: string; $options: string };
+}

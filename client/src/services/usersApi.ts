@@ -105,3 +105,45 @@ export const updateProfilePicture = async ({ token, formData }: types.IUpdatePro
         }
     }
 };
+
+export const getAllUsers = async ({ searchKeyword, token }): Promise<AxiosResponse<types.IUserInfo[]>> => {
+    try {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        };
+        const { data } = await axios.get(
+            `http://localhost:5000/api/users?username=${searchKeyword}`, config);
+        return data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.log('error message: ', error.message);
+            throw new Error(error.message)
+        } else {
+            console.log('unexpected error: ', error);
+            throw new Error("An unexpected error occurred")
+        }
+    }
+};
+
+export const deleteUser = async ({ userId, token }): Promise<AxiosResponse<types.IUserInfo[]>> => {
+    try {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        };
+        const { data } = await axios.delete(
+            `http://localhost:5000/api/users/${userId}`, config);
+        return data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.log('error message: ', error.message);
+            throw new Error(error.message)
+        } else {
+            console.log('unexpected error: ', error);
+            throw new Error("An unexpected error occurred")
+        }
+    }
+};

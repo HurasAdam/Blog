@@ -15,6 +15,7 @@ import ManagePosts from "./pages/Admin/views/ManagePosts";
 import EditPost from "./pages/Admin/views/EditPost";
 import ManageTags from "./pages/Admin/views/ManageTags";
 import NewTag from "./pages/Admin/views/NewTag";
+import Users from "./pages/Admin/views/Users";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path="posts/manage" element={<ManagePosts />} />
           <Route path="tags/manage" element={<ManageTags />} />
           <Route path="posts/manage/edit/:id" element={<EditPost />} />
+          <Route path="users" element={<Users />} />
         </Route>
       </Routes>
       <Toaster />

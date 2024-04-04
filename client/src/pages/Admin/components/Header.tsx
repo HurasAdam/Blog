@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { images } from "../../../constants";
 import { useEffect, useState } from "react";
 import { AiFillDashboard, AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
+import { MdPeopleAlt } from "react-icons/md";
 import { FaComments } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
 import { FaHashtag } from "react-icons/fa";
@@ -45,6 +46,15 @@ const MENU_ITEMS = [
     icon: <FaHashtag className="text-xl" />,
     name: "tags",
     type: "collapse",
+  },
+
+
+  {
+    title: "Users",
+    link: "/admin/users",
+    icon: <MdPeopleAlt className="text-xl" />,
+    name: "users",
+    type: "link",
   },
 ];
 const Header: React.FC = () => {

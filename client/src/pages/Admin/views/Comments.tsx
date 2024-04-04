@@ -322,7 +322,10 @@ const Comments: React.FC = () => {
           </div>
         </div>
       </div>
-      <Popup handlePopupClose={handlePopupClose} isPopupOpen={isPopupOpen}>
+      <Popup
+        type="commentDetails"
+        handlePopupClose={handlePopupClose}
+        isPopupOpen={isPopupOpen}>
         <div className="flex flex-col md:flex-row px-5 h-fit ">
           <div className="flex flex-col md:pt-10">
             <img
