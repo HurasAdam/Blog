@@ -163,10 +163,46 @@ const updateProfilePicture = async (
   }
 };
 
+const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
+
+  try {
+    let where: types.IUserWhere = {};
+    const selectedUser = req.query.username;
+    if (selectedUser && typeof selectedUser === "string") {
+      where.$or = [
+        { name: { $regex: selectedUser, $options: "i" } },
+        { email: { $regex: selectedUser, $options: "i" } }
+      ];
+    }
+    const result = await User.find(where).select(["-password"])
+    return res.status(200).json(result)
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+}
+
+
+const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
+
+  try {
+    const { id } = req.params;
+    const user = await User.findOneAndDelete({ _id: id })
+    console.log(user)
+    return res.status(200).send()
+  } catch (error) {
+    console.log(error);
+    next(error)
+  }
+}
+
+
 export {
   registerUser,
   loginUser,
   userProfile,
   updateProfile,
   updateProfilePicture,
+  getAllUsers,
+  deleteUser
 };
