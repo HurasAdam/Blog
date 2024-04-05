@@ -51,7 +51,7 @@ const updatePost = async (
   const { id } = req.params;
 
   try {
-    const { title, caption, description, tags, categories } = req.body;
+    const { title, caption, description, tags, categories, readingTime } = req.body;
     const file = req.file;
     let photo;
 
@@ -82,6 +82,7 @@ const updatePost = async (
     post.title = title || post.title;
     post.caption = caption || post.caption;
     post.description = description || post.description;
+    post.readingTime = readingTime || post.readingTime;
     post.tags = tags || post.tags;
     post.photo = photo || post.photo;
     post.categories = categories || post.categories;
