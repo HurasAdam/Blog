@@ -1,15 +1,7 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import { HiOutlineCamera } from "react-icons/hi";
-import { IoCreateOutline } from "react-icons/io5";
-import { createPost } from "../../../services/postApi";
 import { useSelector } from "react-redux";
-import { GrFormAdd } from "react-icons/gr";
-import { getCategories } from "../../../services/categoryApi";
-import MultiSelect from "../../../components/shared/MultiSelect";
-import { getTags } from "../../../services/tagsApi";
+
 
 interface IOnSubmitProps {
     title: string;
@@ -41,26 +33,23 @@ const PostForm: React.FC = ({ categories, tags, handleFileChange, handleDeleteIm
     const {
         handleSubmit,
         register,
-        reset,
         watch,
-        getValues,
-        formState: { errors },
+        setValue,
+        reset,
+        formState: { errors, isDirty },
     } = formMethods;
 
-    const photo = watch("postPicture")
-
-
-
+    const formFileRemoveHanlder = () => {
+        formMethods.setValue("postPicture", "");
+        setValue('isDirty', true);
+    }
 
 
     const onSubmit = handleSubmit((data) => {
         const { title, description, postPicture, tags, categories, readingTime } =
             data;
 
-
-
         const formData = new FormData();
-
         if (post) {
             formData.append("id", post?._id)
         }
@@ -78,17 +67,19 @@ const PostForm: React.FC = ({ categories, tags, handleFileChange, handleDeleteIm
             formData.append(`tags[${index}]`, tag);
         });
 
-
-        handleSave({
-            formData: formData,
-            token: userState?.token
-        });
+        // handleSave({
+        //     formData: formData,
+        //     token: userState?.token
+        // });
+        console.log(data)
     });
+
+
+    console.log("isDirty")
+    console.log(isDirty)
 
     return (
         <div>
-
-
             <form
                 onSubmit={onSubmit}
                 className=" mx-auto w-full flex flex-col gap-y-8 "
@@ -274,7 +265,7 @@ const PostForm: React.FC = ({ categories, tags, handleFileChange, handleDeleteIm
                     {postPicture && (
                         <button
                             type="button"
-                            onClick={handleDeleteImage}
+                            onClick={() => handleDeleteImage(formFileRemoveHanlder())}
                             className="w-fit bg-red-500 text-white font-semibold rounded-lg px-2 py-1 mt-5"
                         >
                             Delete Image
@@ -282,10 +273,11 @@ const PostForm: React.FC = ({ categories, tags, handleFileChange, handleDeleteIm
                     )}
                 </div>
                 <button
+                    disabled={!isDirty}
                     type="submit"
-                    className="w-fit bg-green-500 text-white font-semibold rounded-lg px-2 py-1 mt-5"
+                    className="w-fit  bg-green-500 text-white font-semibold rounded-lg py-2 px-5 mt-5 disabled:opacity-70 disabled:cursor-not-allowed"
                 >
-                    Create Post
+                    {type === "edit" ? "Update" : "Create"}
                 </button>
             </form>
 

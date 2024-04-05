@@ -32,6 +32,7 @@ export interface IPost {
 
 export interface IPostCategory {
   name: string;
+  createdBy: Types.ObjectId;
 }
 export interface IPostTag {
   name: string;

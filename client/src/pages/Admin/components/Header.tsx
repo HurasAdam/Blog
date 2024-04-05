@@ -6,6 +6,7 @@ import { MdPeopleAlt } from "react-icons/md";
 import { FaComments } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
 import { FaHashtag } from "react-icons/fa";
+import { MdCategory } from "react-icons/md";
 import NavItemCollapse from "./NavItemCollapse";
 import NavItem from "./NavItem";
 import { useWindowSize } from "@uidotdev/usehooks";
@@ -35,6 +36,16 @@ const MENU_ITEMS = [
     ],
     icon: <MdDashboard className="text-xl" />,
     name: "posts",
+    type: "collapse",
+  },
+  {
+    title: "Categories",
+    content: [
+      { title: "New", link: "/admin/categories/new" },
+      { title: "Manage", link: "/admin/categories/manage" },
+    ],
+    icon: <MdCategory className="text-xl" />,
+    name: "categories",
     type: "collapse",
   },
   {

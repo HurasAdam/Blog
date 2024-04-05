@@ -75,7 +75,7 @@ const EditPost: React.FC = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries(["post", id]);
-            toast.success("Post created successfully");
+            toast.success("Post Updated Successfully");
         },
         onerror: (error: Error) => {
             toast.error(error.message);

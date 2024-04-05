@@ -51,7 +51,7 @@ const NewPost: React.FC = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["posts"]);
-      toast.success("Post created successfully");
+      toast.success("Post Created successfully");
     },
     onerror: (error: Error) => {
       toast.error(error.message);
@@ -64,10 +64,11 @@ const NewPost: React.FC = () => {
     const file = e.target.files[0];
     setPostPicture(file);
   };
-  const handleDeleteImage = () => {
+  const handleDeleteImage = (cb) => {
     if (window.confirm("Do you want to delete Post picture?")) {
       setPostPicture(null);
-      formMethods.setValue("postPicture", "");
+      cb()
+
     }
   };
 
