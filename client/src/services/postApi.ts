@@ -40,6 +40,7 @@ export const deletePost = async ({ postId, token }) => {
     try {
         const config = {
             headers: {
+                "Content-Type": "multipart/form-data",
                 Authorization: `Bearer ${token}`
             }
         }
@@ -57,16 +58,19 @@ export const deletePost = async ({ postId, token }) => {
     }
 }
 
-export const updatePost = async ({ updatedData, postId, token }) => {
+export const updatePost = async ({ formData, token }) => {
+
+    const postId = formData.get('id');
 
     try {
         const config = {
             headers: {
+                "Content-Type": "multipart/form-data",
                 Authorization: `Bearer ${token}`
             }
         }
 
-        const { data } = await axios.put(`http://localhost:5000/api/posts/${postId}`, updatedData, config)
+        const { data } = await axios.put(`http://localhost:5000/api/posts/${postId}`, formData, config)
         return data
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -80,24 +84,24 @@ export const updatePost = async ({ updatedData, postId, token }) => {
 }
 
 
-export const createPost = async ({token,postData})=>{
-try{
+export const createPost = async ({ formData, token }) => {
+    try {
 
-const config = {
-    headers:{
-        Authorization: `Bearer ${token}`
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+
+        const { data } = await axios.post("http://localhost:5000/api/posts", formData, config)
+        return data
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.log("error message:", error.message);
+            throw new Error(error.message);
+        } else {
+            console.log("unexpected error", error)
+            throw new Error("An unexpected error occured")
+        }
     }
-}
-
-const {data}=await axios.post("http://localhost:5000/api/posts",postData,config)
-return data
-}catch(error){
-if(axios.isAxiosError(error)){
-    console.log("error message:", error.message);
-    throw new Error(error.message);
-}else{
-console.log("unexpected error", error)
-throw new Error("An unexpected error occured")
-}
-}
 }

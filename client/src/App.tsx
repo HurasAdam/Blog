@@ -12,10 +12,11 @@ import Admin from "./pages/Admin/views/Admin";
 import Comments from "./pages/Admin/views/Comments";
 import NewPost from "./pages/Admin/views/NewPosts";
 import ManagePosts from "./pages/Admin/views/ManagePosts";
-import EditPost from "./pages/Admin/views/EditPost";
 import ManageTags from "./pages/Admin/views/ManageTags";
 import NewTag from "./pages/Admin/views/NewTag";
 import Users from "./pages/Admin/views/Users";
+import EditPost from "./pages/Admin/views/EditPost";
+
 
 function App() {
   return (
