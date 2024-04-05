@@ -19,6 +19,8 @@ const createCategory = async (
 
     const newCategory = new Category({
       name,
+      createdBy: req.user,
+
     });
 
     const createdCategory = await newCategory.save();
@@ -62,6 +64,7 @@ const getAllCategories = async (
     const result = await query
       .skip(skip)
       .limit(pageSize)
+      .populate([{ path: "createdBy", select: ["name", "avatar"] }])
       .sort({ updatedAt: "descending" });
 
     return res.status(200).json(result);
