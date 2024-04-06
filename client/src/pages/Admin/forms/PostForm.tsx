@@ -12,7 +12,7 @@ interface IOnSubmitProps {
     postPicture: FileList | null;
 }
 
-const PostForm: React.FC = ({ categories, tags, handleFileChange, handleDeleteImage, postPicture, value, handleSave, type, post }) => {
+const PostForm: React.FC = ({ categories, tags, handleFileChange, handleDeleteImage, postPicture, isUpdateMutationLoading, handleSave, type, post }) => {
 
     const userState = useSelector((state) => state?.user?.userInfo);
 
@@ -24,7 +24,8 @@ const PostForm: React.FC = ({ categories, tags, handleFileChange, handleDeleteIm
             readingTime: post ? post?.readingTime : "",
             categories: post ? post?.categories : [],
             tags: post ? post?.tags : [],
-            postPicture: post ? post?.photo : postPicture,
+            postPicture: post ? post?.photo : ""
+
         },
         mode: "onChange",
     });
@@ -35,29 +36,30 @@ const PostForm: React.FC = ({ categories, tags, handleFileChange, handleDeleteIm
         register,
         watch,
         setValue,
-        reset,
         formState: { errors, isDirty },
     } = formMethods;
 
     const formFileRemoveHanlder = () => {
-        formMethods.setValue("postPicture", "");
-        setValue('isDirty', true);
+        setValue("postPicture", "");
+
     }
 
 
     const onSubmit = handleSubmit((data) => {
         const { title, description, postPicture, tags, categories, readingTime } =
             data;
-
         const formData = new FormData();
         if (post) {
             formData.append("id", post?._id)
         }
-
+        const postPhoto = postPicture[0]
         formData.append("title", title);
         formData.append("description", description);
         formData.append("readingTime", readingTime);
-        formData.append("postPicture", postPicture ? postPicture[0] : "");
+
+        if (postPicture && typeof (postPicture) === 'object') {
+            formData.append("postPicture", postPhoto);
+        }
 
         categories.forEach((category, index) => {
             formData.append(`categories[${index}]`, category);
@@ -67,16 +69,15 @@ const PostForm: React.FC = ({ categories, tags, handleFileChange, handleDeleteIm
             formData.append(`tags[${index}]`, tag);
         });
 
-        // handleSave({
-        //     formData: formData,
-        //     token: userState?.token
-        // });
-        console.log(data)
+        handleSave({
+            formData: formData,
+            token: userState?.token
+        });
+
     });
 
+    const fileInputValue = watch("postPicture")[0]
 
-    console.log("isDirty")
-    console.log(isDirty)
 
     return (
         <div>
@@ -158,11 +159,8 @@ const PostForm: React.FC = ({ categories, tags, handleFileChange, handleDeleteIm
                     <div className=" grid-row-5 gap-3 md:grid-cols-3 md:gap-3 lg:grid">
                         {categories &&
                             categories.map((category) => {
-
                                 const id = category?._id
-
                                 const formCategoriesState = watch("categories")
-
                                 const isChecked = formCategoriesState?.some((c) => c._id === id)
                                 return (
                                     <label
@@ -204,14 +202,9 @@ const PostForm: React.FC = ({ categories, tags, handleFileChange, handleDeleteIm
                     <div className=" grid-row-5 gap-3 md:grid-cols-3 md:gap-3 lg:grid">
                         {tags &&
                             tags.map((tag) => {
-
                                 const id = tag?._id
-
                                 const formTagsState = watch("tags")
-
                                 const isChecked = formTagsState?.some((t) => t._id === id)
-
-
                                 return (
                                     <label
                                         htmlFor={tag?._id}
@@ -242,11 +235,11 @@ const PostForm: React.FC = ({ categories, tags, handleFileChange, handleDeleteIm
                     )}
                 </div>
                 <div>
-                    <label htmlFor="postPicture" className="text-sm cursor-pointer  ">
-                        {postPicture ? (
-                            <img src={postPicture} />
+                    <label htmlFor="postPicture" className="text-sm cursor-pointer">
+                        {watch("postPicture") ? (
+                            <img src={watch("postPicture")?.length > 10 ? watch("postPicture") : URL.createObjectURL(fileInputValue)} alt="Post Picture" />
                         ) : (
-                            <div className="w-full  min-h-[200px] bg-blue-50/50 flex flex-col justify-center items-center border-[2px] border-dashed rounded-lg ">
+                            <div className="w-full min-h-[200px] bg-blue-50/50 flex flex-col justify-center items-center border-[2px] border-dashed rounded-lg">
                                 <HiOutlineCamera className="w-16 h-auto text-primary" />
                                 <span className="font-semibold text-slate-900 text-base">
                                     Add Photo here
@@ -259,10 +252,9 @@ const PostForm: React.FC = ({ categories, tags, handleFileChange, handleDeleteIm
                         {...register("postPicture")}
                         type="file"
                         className=" mt-2 sr-only"
-                        onChange={handleFileChange}
                         id="postPicture"
                     />
-                    {postPicture && (
+                    {watch("postPicture") && (
                         <button
                             type="button"
                             onClick={() => handleDeleteImage(formFileRemoveHanlder())}
@@ -272,12 +264,18 @@ const PostForm: React.FC = ({ categories, tags, handleFileChange, handleDeleteIm
                         </button>
                     )}
                 </div>
+                {errors?.postPicture && (
+                    <span className="text-xs text-red-500 px-1 font-semibold">
+                        {errors.postPicture?.message}
+                    </span>
+                )}
                 <button
                     disabled={!isDirty}
                     type="submit"
                     className="w-fit  bg-green-500 text-white font-semibold rounded-lg py-2 px-5 mt-5 disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                     {type === "edit" ? "Update" : "Create"}
+                    {isUpdateMutationLoading && "Saving..."}
                 </button>
             </form>
 

@@ -28,7 +28,7 @@ const EditPost: React.FC = () => {
     const userState = useSelector((state) => state?.user?.userInfo);
     const { id } = useParams();
 
-    const [postPicture, setPostPicture] = useState(null);
+    const [postPicture, setPostPicture] = useState(undefined);
     const [value, setValue] = useState();
 
 
@@ -51,21 +51,19 @@ const EditPost: React.FC = () => {
 
     const {
         data: postDetails,
-        isLoading,
-        isError,
     } = useQuery({
         queryFn: () => getPost({ id }),
         queryKey: ["post", id],
         onSuccess: (data) => {
+            setPostPicture(data?.photo)
 
-            setPostPicture(data.photo)
         },
         refetchOnWindowFocus: false
     });
 
 
 
-    const { mutate: updatePostMutation } = useMutation({
+    const { mutate: updatePostMutation, isLoading: isUpdateMutationLoading } = useMutation({
         mutationFn: ({ formData, token }) => {
             return updatePost({
                 formData,
@@ -97,8 +95,8 @@ const EditPost: React.FC = () => {
     };
     const handleDeleteImage = () => {
         if (window.confirm("Do you want to delete Post picture?")) {
-            setPostPicture(null);
-            formMethods.setValue("postPicture", "");
+            setPostPicture(undefined);
+            cb()
         }
     };
 
@@ -120,7 +118,7 @@ const EditPost: React.FC = () => {
                     handleFileChange={handleFileChange}
                     handleDeleteImage={handleDeleteImage}
                     postPicture={postPicture}
-                    value={value}
+                    isUpdateMutationLoading={isUpdateMutationLoading}
                     handleSave={handleSave}
                 />) : <></>}
             </section>
