@@ -17,21 +17,32 @@ interface IOnSubmitProps {
     description: string;
 
 }
+interface ICategory {
+    _id: string;
+    name: string;
+    description: string;
+    createdBy: string;
+    createdAt: string;
+    updatedAt: string;
 
+}
 
 interface ICategoryFormProps {
     type: string;
     isCreateCategoryLoading: boolean;
     handleSave: () => void;
+    category: ICategory
+
 }
 
-const CategoryForm: React.FC<ICategoryFormProps> = ({ handleSave, type, isCreateCategoryLoading }) => {
+
+const CategoryForm: React.FC<ICategoryFormProps> = ({ handleSave, type, isCreateCategoryLoading, category }) => {
     const userState = useSelector((state) => state?.user?.userInfo);
 
     const formMethods = useForm<IOnSubmitProps>({
         defaultValues: {
-            name: "",
-            description: "",
+            name: category ? category?.name : "",
+            description: category ? category?.description : "",
         },
         mode: "onChange",
     });
@@ -45,7 +56,18 @@ const CategoryForm: React.FC<ICategoryFormProps> = ({ handleSave, type, isCreate
     } = formMethods;
 
     const onSubmit = handleSubmit((data) => {
-        handleSave({ formData: data, token: userState?.token })
+
+        const { name, description } = data;
+        const requestData = {
+            name: name,
+            description: description
+        };
+
+        if (category) {
+            requestData.id = category._id;
+        }
+
+        handleSave({ formData: requestData, token: userState?.token })
 
     });
 

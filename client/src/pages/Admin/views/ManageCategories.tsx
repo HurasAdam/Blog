@@ -199,7 +199,7 @@ const ManageCategories: React.FC = () => {
                                                             Delete
                                                         </button>
                                                         <Link
-                                                            to={`/admin/posts/manage/edit/${tag._id}`}
+                                                            to={`/admin/categories/manage/edit/${tag._id}`}
                                                             className="text-green-600 hover:text-green-900"
                                                         >
                                                             Edit

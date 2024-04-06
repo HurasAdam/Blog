@@ -18,6 +18,7 @@ import Users from "./pages/Admin/views/Users";
 import EditPost from "./pages/Admin/views/EditPost";
 import ManageCategories from "./pages/Admin/views/ManageCategories";
 import NewCategory from "./pages/Admin/views/NewCategory";
+import EditCategory from "./pages/Admin/views/EditCategory";
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
           <Route path="tags/manage" element={<ManageTags />} />
           <Route path="categories/manage" element={<ManageCategories />} />
           <Route path="posts/manage/edit/:id" element={<EditPost />} />
+          <Route path="categories/manage/edit/:id" element={<EditCategory />} />
           <Route path="users" element={<Users />} />
         </Route>
       </Routes>

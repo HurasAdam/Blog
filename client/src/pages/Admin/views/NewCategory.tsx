@@ -18,10 +18,7 @@ interface IOnSubmitProps {
     description: string;
 
 }
-
 const NewCategory: React.FC = () => {
-    const userState = useSelector((state) => state?.user?.userInfo);
-
 
     const { mutate: createCategoryMutation, isLoading: isCreateCategoryLoading } = useMutation({
         mutationFn: ({ formData, token }) => {
