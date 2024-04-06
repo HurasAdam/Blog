@@ -7,10 +7,11 @@ import { IoCreateOutline } from "react-icons/io5";
 import { createPost } from "../../../services/postApi";
 import { useSelector } from "react-redux";
 import { GrFormAdd } from "react-icons/gr";
-import { getCategories } from "../../../services/categoryApi";
+import { createCategory, getCategories } from "../../../services/categoryApi";
 import MultiSelect from "../../../components/shared/MultiSelect";
 import { createTag, getTags } from "../../../services/tagsApi";
 import { COLORS } from "../../../constants/colors";
+import CategoryForm from "../forms/CategoryForm";
 
 interface IOnSubmitProps {
     name: string;
@@ -21,40 +22,27 @@ interface IOnSubmitProps {
 const NewCategory: React.FC = () => {
     const userState = useSelector((state) => state?.user?.userInfo);
 
-    const formMethods = useForm<IOnSubmitProps>({
-        defaultValues: {
-            name: "",
-            description: "",
-        },
-        mode: "onChange",
-    });
 
-    const { mutate: createTagMutation } = useMutation({
-        mutationFn: ({ token, name, color }) => {
-            return createTag({
-                token,
-                name,
-                color,
+    const { mutate: createCategoryMutation, isLoading: isCreateCategoryLoading } = useMutation({
+        mutationFn: ({ formData, token }) => {
+            return createCategory({
+                formData,
+                token
             });
         },
         onSuccess: () => {
-            toast.success("Tag Created Successfully");
+            toast.success("Category Created Successfully");
         },
         onerror: (error: Error) => {
             toast.error(error.message);
         },
     });
 
-    const {
-        handleSubmit,
-        register,
-        formState: { errors },
-    } = formMethods;
 
-    const onSubmit = handleSubmit((data) => {
-        const { name, color } = data;
-        createTagMutation({ token: userState?.token, name, color });
-    });
+
+    const handleSave = ({ formData, token }) => {
+        createCategoryMutation({ formData, token })
+    }
 
     return (
         <div>
@@ -64,60 +52,11 @@ const NewCategory: React.FC = () => {
                     Create Category
                 </h1>
 
-                <form
-                    onSubmit={onSubmit}
-                    className=" mx-auto w-full flex flex-col gap-y-8 "
-                >
-                    <div className="">
-                        <label
-                            htmlFor="name"
-                            className="text-sm font-semibold text-gray-700 block mb-1.5"
-                        >
-                            Name
-                        </label>
-                        <input
-                            {...register("name", { required: "category name is required" })}
-                            type="text"
-                            className="border rounded w-full py-3  lg:py-1.5 px-2 xl:py-1 font-normal"
-                            id="name"
-                            placeholder="here enter category name"
-                        />
-                        {errors?.name && (
-                            <span className="text-xs text-red-500  font-semibold">
-                                {errors.name?.message}
-                            </span>
-                        )}
-                    </div>
-
-                    <div className="">
-                        <label
-                            htmlFor="description"
-                            className="text-sm font-semibold text-gray-700 block mb-1.5"
-                        >
-                            Description
-                        </label>
-                        <textarea
-                            {...register("description", { required: "category description is required" })}
-
-                            className="border rounded w-full py-3  lg:py-1.5 px-2 xl:py-1 font-normal"
-                            id="description"
-                            rows={10}
-                            placeholder="here enter category description"
-                        />
-                        {errors?.name && (
-                            <span className="text-xs text-red-500  font-semibold">
-                                {errors.name?.message}
-                            </span>
-                        )}
-                    </div>
-
-                    <button
-                        type="submit"
-                        className="w-fit bg-green-500 text-white font-semibold rounded-lg px-2 py-1 mt-5"
-                    >
-                        Create Category
-                    </button>
-                </form>
+                <CategoryForm
+                    type="create"
+                    handleSave={handleSave}
+                    isCreateCategoryLoading={isCreateCategoryLoading}
+                />
             </section>
         </div>
     );

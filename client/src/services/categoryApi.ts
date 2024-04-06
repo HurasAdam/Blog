@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const getCategories = async ({ token }) => {
+const getCategories = async ({ token }: { token: string }) => {
   try {
     const config = {
       headers: {
@@ -22,5 +22,31 @@ const getCategories = async ({ token }) => {
     }
   }
 };
+const createCategory = async ({ formData, token }) => {
+  try {
+    const config = {
+      headers: {
+        AUthorization: `Bearer ${token}`,
+      },
+    };
 
-export { getCategories };
+    const { data } = await axios.post(
+      "http://localhost:5000/api/category",
+      formData, config
+    );
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log("error message", error.message);
+      throw new Error(error.message);
+    } else {
+      throw new Error("An unexpected error occurred");
+    }
+  }
+};
+
+
+
+
+
+export { getCategories, createCategory };
