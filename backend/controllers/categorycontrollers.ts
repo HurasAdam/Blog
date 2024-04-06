@@ -8,7 +8,7 @@ const createCategory = async (
   next: NextFunction
 ) => {
   try {
-    const { name } = req.body;
+    const { name, description } = req.body;
 
     const category = await Category.findOne({ name });
 
@@ -20,6 +20,7 @@ const createCategory = async (
     const newCategory = new Category({
       name,
       createdBy: req.user,
+      description
 
     });
 
@@ -73,4 +74,25 @@ const getAllCategories = async (
   }
 };
 
-export { createCategory, getAllCategories };
+const getCategory = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const category = await Category.findOne({ _id: id })
+
+    if (!category) {
+      const error = new Error("Category not found");
+      return next(error);
+    }
+
+    return res.status(200).json(category);
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+export { createCategory, getAllCategories, getCategory };

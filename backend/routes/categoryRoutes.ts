@@ -5,6 +5,7 @@ import { uploadFile } from "../middleware/uploadMiddleware";
 const router = express.Router();
 
 router.get("/", authGuard, adminGuard, categoryController.getAllCategories);
+router.get("/:id", authGuard, adminGuard, categoryController.getCategory);
 router.post("/", authGuard, adminGuard, categoryController.createCategory);
 // router.put("/:id", authGuard, adminGuard, categoryController.updateCategory);
 // router.delete("/:id", authGuard, adminGuard, categoryController.deleteCategory);

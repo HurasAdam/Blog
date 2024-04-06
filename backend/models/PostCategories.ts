@@ -5,6 +5,7 @@ const PostCategoriesSchema = new Schema<types.IPostCategory>(
   {
     name: { type: String, required: true, unique: true },
     createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    description: { type: String }
   },
   { timestamps: true }
 );
