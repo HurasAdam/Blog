@@ -65,4 +65,59 @@ const getAllTags = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { createTag, getAllTags };
+const getTag = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+    const tag = await Tag.findById({ _id: id });
+
+    if (!tag) {
+      const error = new Error("Tag not found")
+      next(error);
+      return;
+    }
+
+    return res.status(200).json(tag);
+  } catch (error) {
+    next(error);
+  }
+};
+const updateTag = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+    const { name, color } = req.body;
+    const tag = await Tag.findById({ _id: id });
+
+    if (!tag) {
+      const error = new Error("Tag not found")
+      next(error);
+      return;
+    }
+    tag.name = name || tag?.name;
+    tag.color = color || tag?.color;
+
+    const updatedTag = await tag.save()
+    return res.status(200).json(updatedTag);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteTag = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+
+    const tag = await Tag.findOneAndDelete({ _id: id });
+
+    if (!tag) {
+      const error = new Error("Tag not found")
+      next(error);
+      return;
+    }
+
+
+    return res.status(200).json({ message: "Tag has been deleted sucessfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+export { createTag, getAllTags, getTag, updateTag, deleteTag };

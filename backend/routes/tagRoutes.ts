@@ -5,7 +5,8 @@ const router = express.Router();
 
 router.get("/", authGuard, adminGuard, tagController.getAllTags);
 router.post("/", authGuard, adminGuard, tagController.createTag);
-// router.put("/:id", authGuard, adminGuard, categoryController.updateCategory);
-// router.delete("/:id", authGuard, adminGuard, categoryController.deleteCategory);
+router.get("/:id", authGuard, adminGuard, tagController.getTag);
+router.put("/:id", authGuard, adminGuard, tagController.updateTag);
+router.delete("/:id", authGuard, adminGuard, tagController.deleteTag);
 
 export default router;
