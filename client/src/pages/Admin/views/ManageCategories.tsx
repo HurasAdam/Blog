@@ -181,18 +181,20 @@ const ManageCategories: React.FC = () => {
                                                         </div>
                                                     </td>
                                                     <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
-                                                        <p className="text-gray-900 whitespace-no-wrap text-xs">
-                                                            {category?.createdBy?.name}
-                                                        </p>
-                                                        <img
-                                                            className="w-10 h-auto rounded-full  object-cover object-center"
-                                                            src={
-                                                                category?.createdBy?.avatar
-                                                                    ? category?.createdBy?.avatar
-                                                                    : images.PostProfileImage
-                                                            }
-                                                            alt="avatar"
-                                                        />
+                                                        <div className="flex flex-col gap-x-1.5 gap-y-1.5 flex-wrap">
+                                                            <img
+                                                                className="w-10 h-auto rounded-full  object-cover object-center"
+                                                                src={
+                                                                    category?.createdBy?.avatar
+                                                                        ? category?.createdBy?.avatar
+                                                                        : images.PostProfileImage
+                                                                }
+                                                                alt="avatar"
+                                                            />
+                                                            <p className="text-gray-900 whitespace-no-wrap text-xs">
+                                                                {category?.createdBy?.name}
+                                                            </p>
+                                                        </div>
                                                     </td>
                                                     <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
                                                         <p className="text-gray-900 whitespace-no-wrap">

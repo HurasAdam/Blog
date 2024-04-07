@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deletePost, getAllPosts } from "../../../services/postApi";
 import images from "../../../constants/images";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Pagination from "../../../components/Pagination";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
@@ -138,6 +138,7 @@ const ManagePosts: React.FC = () => {
                     </tr>
                   ) : (
                     posts?.data.map((post) => {
+                      const postCategories = post?.categories
                       return (
                         <tr>
                           <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
@@ -162,8 +163,8 @@ const ManagePosts: React.FC = () => {
                           </td>
                           <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
                             <p className="text-gray-900 whitespace-no-wrap">
-                              {post?.categories.lenght > 0
-                                ? post.categories[0]
+                              {post?.categories.length > 0
+                                ? post.categories.map(({ name }: { name: string }, index: number) => index > 0 ? `, ${name}` : name)
                                 : "Uncategorized"}
                             </p>
                           </td>
@@ -183,16 +184,16 @@ const ManagePosts: React.FC = () => {
                             <div className="flex gap-x-1.5 gap-y-1.5 flex-wrap">
                               {post?.tags.length > 0
                                 ? post?.tags.map((tag, index) => {
-                                    return (
-                                      <span
-                                        className="bg-blue-400 py-1 px-1 rounded-[5px] font-bold text-white "
-                                        key={index}
-                                      >
-                                        {tag?.name}
-                                        {post?.tags.length - 1 !== index && ","}
-                                      </span>
-                                    );
-                                  })
+                                  return (
+                                    <span
+                                      className="bg-blue-400 py-1 px-1 rounded-[5px] font-bold text-white "
+                                      key={index}
+                                    >
+                                      {tag?.name}
+                                      {post?.tags.length - 1 !== index && ","}
+                                    </span>
+                                  );
+                                })
                                 : "No tags"}
                             </div>
                           </td>

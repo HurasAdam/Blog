@@ -195,18 +195,21 @@ const ManageTags: React.FC = () => {
                             </div>
                           </td>
                           <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
-                            <p className="text-gray-900 whitespace-no-wrap text-xs">
-                              {tag?.createdBy?.name}
-                            </p>
-                            <img
-                              className="w-10 h-auto rounded-full  object-cover object-center"
-                              src={
-                                tag?.createdBy?.avatar
-                                  ? tag?.createdBy?.avatar
-                                  : images.PostProfileImage
-                              }
-                              alt="avatar"
-                            />
+                            <div className=" flex-col gap-x-1.5 gap-y-1.5 flex-wrap">
+
+                              <img
+                                className="w-10 h-auto rounded-full  object-cover object-center"
+                                src={
+                                  tag?.createdBy?.avatar
+                                    ? tag?.createdBy?.avatar
+                                    : images.PostProfileImage
+                                }
+                                alt="avatar"
+                              />
+                              <p className="text-gray-900 whitespace-no-wrap text-xs">
+                                {tag?.createdBy?.name}
+                              </p>
+                            </div>
                           </td>
                           <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
                             <p className="text-gray-900 whitespace-no-wrap">

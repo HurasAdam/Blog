@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getTags } from "../../../services/tagsApi";
 import { IoMdCheckmark } from "react-icons/io";
-import { approveComment, getAllComments } from "../../../services/commentApi";
+import { approveComment, deleteComment, getAllComments } from "../../../services/commentApi";
 import Popup from "../../../components/shared/Popup";
 
 const Comments: React.FC = () => {
@@ -40,14 +40,14 @@ const Comments: React.FC = () => {
     refetchOnWindowFocus: false,
   });
 
-  const { mutate: mutateDeletePost, isLoading: isLoadingDeletePost } =
+  const { mutate: mutateDeleComment, isLoading: isLoadingDeletePost } =
     useMutation({
-      mutationFn: ({ postId, token }) => {
-        return deletePost({ postId, token });
+      mutationFn: ({ commentId, token }) => {
+        return deleteComment({ commentId, token });
       },
       onSuccess: (data) => {
-        queryClient.invalidateQueries("posts");
-        toast.success("Post deleted sucessfully");
+        queryClient.invalidateQueries(["comments"]);
+        toast.success("Comment deleted sucessfully");
       },
       onError: (error: Error) => {
         toast.error(error.message);
@@ -60,7 +60,7 @@ const Comments: React.FC = () => {
         return approveComment({ commentId, token });
       },
       onSuccess: (data) => {
-        queryClient.invalidateQueries("comments");
+        queryClient.invalidateQueries(["comments"]);
         toast.success("Comment accepted sucessfully");
       },
       onError: (error: Error) => {
@@ -72,8 +72,8 @@ const Comments: React.FC = () => {
     mutateApproveComment({ commentId, token });
   };
 
-  const deletePostHandler = ({ commentId, token }): void => {
-    mutateDeletePost({ commentId, token });
+  const deleteCommentHandler = ({ commentId, token }): void => {
+    mutateDeleComment({ commentId, token });
   };
 
   const searchKeywordHandler = (
@@ -95,10 +95,15 @@ const Comments: React.FC = () => {
     refetch();
   };
 
-  const handlePopupOpen = (value: boolean, content) => {
-    setPopupContent(content);
-    setIsPopupOpen(value);
-  };
+  const handlePopupOpen = ({ value, content, type }) => {
+    if (type === "details") {
+      setPopupContent(content);
+      setIsPopupOpen(value);
+    } else if (type === "delete") {
+      setPopupContent(content);
+      setIsDeletePopupOpen(value);
+    }
+  }
 
   const handlePopupClose = ({ type, value }) => {
     if (type === "delete") {
@@ -244,12 +249,13 @@ const Comments: React.FC = () => {
                             </p>
                           </td>
                           <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
-                            <div className="flex gap-x-1.5 gap-y-1.5 flex-wrap">
+                            <div className="flex flex-col gap-x-1.5 gap-y-1.5 flex-wrap">
                               <img
                                 className="w-10 h-auto rounded-full object-cover object-center"
                                 src={comment?.user?.avatar || images?.userImage}
                                 alt="avatar"
                               />
+                              <spam>{comment?.user?.name}</spam>
                             </div>
                           </td>
                           <td className="px-5 py-5 text-sm bg-white border-b border-gray-200 ">
@@ -279,13 +285,8 @@ const Comments: React.FC = () => {
                           </td>
                           <td className=" gap-4 px-5 py-5 text-sm bg-white border-b border-gray-200 space-x-5 text-center ">
                             <button
-                              onClick={() =>
-                                deletePostHandler({
-                                  postId: comment?._id,
-                                  token: userState?.token,
-                                })
-                              }
-                              disabled={isLoadingDeletePost}
+                              onClick={() => handlePopupOpen({ value: true, content: { commentId: comment?._id }, type: "delete" })}
+
                               type="button"
                               className="text-red-600 hover:red-900 disabled:opacity-70 disabled:cursor-not-allowed"
                             >
@@ -299,11 +300,15 @@ const Comments: React.FC = () => {
                             </Link>
                             <button
                               onClick={() => {
-                                handlePopupOpen(true, {
-                                  text: comment?.description,
-                                  name: comment?.user.name,
-                                  createdAt: comment?.createdAt,
-                                  avatar: comment?.user?.avatar,
+                                handlePopupOpen({
+                                  value: true,
+                                  content: {
+                                    text: comment?.description,
+                                    name: comment?.user.name,
+                                    createdAt: comment?.createdAt,
+                                    avatar: comment?.user?.avatar,
+                                  },
+                                  type: "details"
                                 });
                               }}
                               className="bg-violet-600 text-slate-200 px-2 py-1 rounded-lg text-sm font-semibold"
@@ -350,6 +355,35 @@ const Comments: React.FC = () => {
               })}
             </span>
             <span className="px-4 md:px-10 ">{popupContent?.text}</span>
+          </div>
+        </div>
+      </Popup>
+      <Popup
+        type="delete"
+        handlePopupClose={handlePopupClose}
+        isPopupOpen={isPopupOpen}
+        isDeletePopupOpen={isDeletePopupOpen}
+      >
+        <div className=" h-full flex flex-col  justify-between">
+          <span className="font-roboto text-2xl font-bold text-rose-700 md:px-2">Are you absolutely sure?</span>
+          <p className="font-roboto text-base md:p-2">This action cannot be undone. Deleting this comment will permanently remove it from the system.</p>
+          <div className="flex justify-end  gap-x-2">
+            <button
+              className="border-2 border-slate-300 hover:bg-rose-700 hover:text-slate-100 hover:border-none py-1.5 px-4 rounded-lg font-semibold"
+              onClick={() => handlePopupClose({ type: "delete", value: false })}>
+              Cancel
+            </button>
+            <button
+              onClick={() =>
+                deleteCommentHandler({
+                  commentId: popupContent?.commentId,
+                  token: userState?.token,
+                })
+              }
+              className="border-2  py-1.5 px-2 rounded-lg font-semibold bg-blue-500 text-slate-100"
+            >
+              Continue
+            </button>
           </div>
         </div>
       </Popup>

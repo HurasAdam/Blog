@@ -76,3 +76,45 @@ export interface IProfileResponse {
     verified: boolean;
     admin: boolean;
 }
+export interface User {
+    _id: string;
+    avatar: string;
+    name: string;
+    verified: boolean;
+}
+
+export interface Tag {
+    _id: string;
+    name: string;
+}
+
+export interface Category {
+    _id: string;
+    name: string;
+}
+export interface Post {
+    _id: string;
+    title: string;
+    description: string;
+    readingTime: string;
+    user: User;
+    photo?: string;
+    tags: Tag[];
+    categories: Category[];
+    createdAt: string;
+    updatedAt: string;
+    id: string;
+}
+
+export interface PostsResponse {
+    data: Post[];
+    headers?: {
+        "content-length"?: string;
+        "content-type"?: string;
+        "x-currentpage"?: string;
+        "x-filter"?: string;
+        "x-pagesize"?: string;
+        "x-totalcount"?: string;
+        "x-totalpagecount"?: string;
+    };
+}

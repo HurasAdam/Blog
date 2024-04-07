@@ -94,7 +94,7 @@ const updateComment = async ({ token, description, commentId }) => {
   }
 };
 
-const deleteComment = async ({ token, commentId }) => {
+const deleteComment = async ({ commentId, token }) => {
   try {
     const config = {
       headers: {
