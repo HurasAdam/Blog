@@ -6,7 +6,7 @@ import * as types from "../../types/index"
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootUserState } from '../../types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getUserProfile, updateProfile } from '../../services/usersApi';
+import { getProfile, updateProfile } from '../../services/usersApi';
 import ProfilePicture from '../../components/ProfilePicture';
 import { userActions } from '../../store/reducers/userReducers';
 import toast from 'react-hot-toast';
@@ -20,7 +20,7 @@ const ProfilePage = () => {
 
     const { data: profileData, isError, isProfileDataLoading } = useQuery({
         queryFn: () => {
-            return getUserProfile({ token: userState.token });
+            return getProfile({ token: userState.token });
         },
         queryKey: ['profile']
     })

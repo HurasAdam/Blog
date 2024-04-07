@@ -1,7 +1,7 @@
 import { Outlet, useNavigate } from "react-router-dom"
 import Header from "./components/Header"
 import { useQuery } from "@tanstack/react-query";
-import { getUserProfile } from "../../services/usersApi";
+import { getProfile } from "../../services/usersApi";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import Loader from "../../components/shared/Loader";
@@ -15,7 +15,7 @@ const AdminLayout: React.FC = () => {
     const userState = useSelector((state: IRootUserState) => state.user.userInfo)
     const { data: profileData, isError, isLoading: isProfileLoading } = useQuery({
         queryFn: () => {
-            return getUserProfile({ token: userState.token });
+            return getProfile({ token: userState.token });
         },
         queryKey: ['profile'],
         retry: false,

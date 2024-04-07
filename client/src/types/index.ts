@@ -63,6 +63,20 @@ export interface IUpdateProfileFormData {
     userData: IRegisterFormData;
 }
 
+
+
+export interface IUpdateUserProfileFormData {
+    token: IToken;
+    formData: {
+        userId: string;
+        name: string;
+        email: string;
+        password?: string
+        admin: boolean;
+        verified: boolean
+    };
+}
+
 export interface IUpdateProfilePictureFormData {
     token: IToken,
     formData: FormData

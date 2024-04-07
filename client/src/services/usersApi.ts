@@ -39,7 +39,7 @@ export const login = async ({ email, password }: types.ILoginFormData): Promise<
     }
 }
 
-export const getUserProfile = async ({ token }: types.IToken): Promise<AxiosResponse<types.IProfileResponse>> => {
+export const getProfile = async ({ token }: types.IToken): Promise<AxiosResponse<types.IProfileResponse>> => {
     try {
         const config = {
             headers: {
@@ -147,3 +147,47 @@ export const deleteUser = async ({ userId, token }): Promise<AxiosResponse<types
         }
     }
 };
+
+
+export const getUserProfile = async ({ token, userId }): Promise<AxiosResponse<types.IProfileResponse>> => {
+    try {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+        const response = await axios.get(`http://localhost:5000/api/users/userProfile/${userId}`, config);
+        return response.data
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.log('error message: ', error.message);
+            throw new Error(error.message)
+        } else {
+            console.log('unexpected error: ', error);
+            throw new Error("An unexpected error occurred")
+        }
+    }
+}
+export const updateUserProfile = async ({ formData, token }: types.IUpdateUserProfileFormData): Promise<AxiosResponse<types.IUserInfo>> => {
+    try {
+
+        const { userId } = formData
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+        const response = await axios.put(`http://localhost:5000/api/users/updateUserProfile/${userId}`, formData, config);
+        return response.data;
+
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.log('error message: ', error.message);
+            throw new Error(error.message)
+        } else {
+            console.log('unexpected error: ', error);
+            throw new Error("An unexpected error occurred")
+        }
+    }
+}

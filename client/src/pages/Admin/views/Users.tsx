@@ -258,7 +258,7 @@ const Users: React.FC = () => {
                                                             Delete
                                                         </button>
                                                         <Link
-                                                            to={`/admin/posts/manage/edit/${user._id}`}
+                                                            to={`/admin/users/manage/edit/${user._id}`}
                                                             className="text-green-600 hover:text-green-900"
                                                         >
                                                             Edit
