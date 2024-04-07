@@ -6,9 +6,11 @@ const router = express.Router();
 
 router.post("/register", userController.registerUser);
 router.post("/login", userController.loginUser);
-router.get("/profile", authGuard, userController.userProfile);
+router.get("/profile", authGuard, userController.getProfile);
+router.get("/userProfile/:id", authGuard, adminGuard, userController.getUserProfile);
 router.get("/", authGuard, adminGuard, userController.getAllUsers);
 router.put("/updateProfile", authGuard, userController.updateProfile);
+router.put("/updateUserProfile/:id", authGuard, adminGuard, userController.updateUserProfile);
 router.put("/updateProfileAvatar", authGuard, uploadFile.single("profilePicture"), userController.updateProfilePicture);
 router.delete("/:id", authGuard, adminGuard, userController.deleteUser);
 

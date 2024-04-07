@@ -65,7 +65,7 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const userProfile = async (req: Request, res: Response, next: NextFunction) => {
+const getProfile = async (req: Request, res: Response, next: NextFunction) => {
   try {
     let user = await User.findById({ _id: req.user });
 
@@ -197,12 +197,79 @@ const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 
+const updateUserProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+  const { name, email, password, admin, verified } = req.body;
+  console.log(req.body)
+  try {
+    let user = await User.findById({ _id: id });
+
+    if (!user) {
+      throw new Error("User not found.");
+    }
+    user.name = name || user.name;
+    user.email = email || user.email;
+    user.admin = typeof (admin !== "") && typeof (admin !== undefined) && admin !== null ? admin : user?.admin;
+    user.verified = typeof (verified !== "") && typeof (verified !== undefined) && verified !== null ? verified : user?.verified;
+    if (password && password.lenhth < 6) {
+      throw new Error("Password length must be at least 6 characters.");
+    } else if (password) {
+      user.password = password;
+    }
+    const updatedUserProfile = await user.save();
+    res.status(200).json({
+      _id: updatedUserProfile._id,
+      avatar: updatedUserProfile.avatar,
+      name: updatedUserProfile.name,
+      email: updatedUserProfile.email,
+      verified: updatedUserProfile.verified,
+      admin: updatedUserProfile.admin,
+      token: await updatedUserProfile.generateJWT(),
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+const getUserProfile = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+    let user = await User.findById({ _id: id });
+
+    if (user) {
+      return res.status(200).json({
+        _id: user._id,
+        avatar: user.avatar,
+        name: user.name,
+        email: user.email,
+        verified: user.verified,
+        admin: user.admin,
+      });
+    } else {
+      let error: types.customError = new Error("User not found");
+      error.statusCode = 404;
+      next(error);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+
 export {
   registerUser,
   loginUser,
-  userProfile,
+  getProfile,
   updateProfile,
   updateProfilePicture,
   getAllUsers,
-  deleteUser
+  deleteUser,
+  updateUserProfile,
+  getUserProfile
 };
