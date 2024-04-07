@@ -46,4 +46,75 @@ const createTag = async ({ token, name, color }) => {
     }
   }
 };
-export { getTags, createTag };
+
+
+const getTag = async ({ token, id }) => {
+  try {
+    const config = {
+      headers: {
+        AUthorization: `Bearer ${token}`,
+      },
+    };
+
+    const { data } = await axios.get(
+      `http://localhost:5000/api/tag/${id}`,
+
+      config
+    );
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log("error message", error.message);
+      throw new Error(error.message);
+    } else {
+      throw new Error("An unexpected error occurred");
+    }
+  }
+};
+
+const updateTag = async ({ formData, token }) => {
+  const { id, name, color } = formData;
+  try {
+    const config = {
+      headers: {
+        AUthorization: `Bearer ${token}`,
+      },
+    };
+
+    const { data } = await axios.put(
+      `http://localhost:5000/api/tag/${id}`,
+      { name, color },
+      config
+    );
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log("error message", error.message);
+      throw new Error(error.message);
+    } else {
+      throw new Error("An unexpected error occurred");
+    }
+  }
+};
+const deleteTag = async ({ tagId, token }: { id: string, token: string }) => {
+
+  try {
+    const config = {
+      headers: {
+        AUthorization: `Bearer ${token}`,
+      },
+    };
+
+    const { data } = await axios.delete(
+      `http://localhost:5000/api/tag/${tagId}`, config);
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log("error message", error.message);
+      throw new Error(error.message);
+    } else {
+      throw new Error("An unexpected error occurred");
+    }
+  }
+};
+export { getTags, createTag, getTag, updateTag, deleteTag };

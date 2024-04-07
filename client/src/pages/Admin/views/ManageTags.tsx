@@ -1,19 +1,25 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { deletePost, getAllPosts } from "../../../services/postApi";
 import images from "../../../constants/images";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Pagination from "../../../components/Pagination";
 import { FaHashtag } from "react-icons/fa";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { getTags } from "../../../services/tagsApi";
+import { deleteTag, getTags } from "../../../services/tagsApi";
+import Popup from "../../../components/shared/Popup";
 
 const ManageTags: React.FC = () => {
   const queryClient = useQueryClient();
   const userState = useSelector((state) => state?.user?.userInfo);
   const [searchKeyword, setSearchKeyword] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const [popupContent, setPopupContent] = useState({});
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
+
+  console.log(popupContent)
 
   const {
     data: tags,
@@ -28,22 +34,42 @@ const ManageTags: React.FC = () => {
     refetchOnWindowFocus: false,
   });
 
-  const { mutate: mutateDeletePost, isLoading: isLoadingDeletePost } =
+  const { mutate: mutateDeleteTag, isLoading: isLoadingDeletePost } =
     useMutation({
-      mutationFn: ({ postId, token }) => {
-        return deletePost({ postId, token });
+      mutationFn: ({ tagId, token }) => {
+        return deleteTag({ tagId, token });
       },
       onSuccess: (data) => {
-        queryClient.invalidateQueries("posts");
-        toast.success("Post deleted sucessfully");
+        queryClient.invalidateQueries("tags");
+        handlePopupClose({ type: "delete", value: false })
+        toast.success("Tag deleted sucessfully");
       },
       onError: (error: Error) => {
         toast.error(error.message);
       },
     });
 
-  const deletePostHandler = ({ postId, token }): void => {
-    mutateDeletePost({ postId, token });
+  const deleteTagHandler = ({ tagId, token }): void => {
+    mutateDeleteTag({ tagId, token });
+  };
+  const handlePopupOpen = ({ value, content, type }) => {
+    if (type === "userDetails") {
+      setPopupContent(content);
+      setIsPopupOpen(value);
+    } else if (type === "delete") {
+      setPopupContent(content);
+      setIsDeletePopupOpen(value);
+    }
+  }
+
+  const handlePopupClose = ({ type, value }) => {
+    if (type === "delete") {
+      setPopupContent("");
+      setIsDeletePopupOpen(value);
+    } else {
+      setPopupContent("");
+      setIsPopupOpen(value);
+    }
   };
 
   const searchKeywordHandler = (
@@ -203,20 +229,15 @@ const ManageTags: React.FC = () => {
                           </td>
                           <td className="px-5 py-5 text-sm bg-white border-b border-gray-200 space-x-5">
                             <button
-                              onClick={() =>
-                                deletePostHandler({
-                                  postId: tag?._id,
-                                  token: userState?.token,
-                                })
-                              }
-                              disabled={isLoadingDeletePost}
+                              onClick={() => handlePopupOpen({ value: true, content: { tagId: tag?._id }, type: "delete" })}
+
                               type="button"
                               className="text-red-600 hover:red-900 disabled:opacity-70 disabled:cursor-not-allowed"
                             >
                               Delete
                             </button>
                             <Link
-                              to={`/admin/posts/manage/edit/${tag._id}`}
+                              to={`/admin/tags/manage/edit/${tag._id}`}
                               className="text-green-600 hover:text-green-900"
                             >
                               Edit
@@ -239,6 +260,37 @@ const ManageTags: React.FC = () => {
           </div>
         </div>
       </div>
+      <Popup
+        type="delete"
+        handlePopupClose={handlePopupClose}
+        isPopupOpen={isPopupOpen}
+        isDeletePopupOpen={isDeletePopupOpen}
+      >
+        <div className=" h-full flex flex-col  justify-between">
+          <span className="font-roboto text-2xl font-bold text-rose-700 md:px-2">Are you absolutely sure?</span>
+          <p className="font-roboto text-base md:p-2">This action cannot be undone.
+            This will permanently delete this tag.
+          </p>
+          <div className="flex justify-end  gap-x-2">
+            <button
+              className="border-2 border-slate-300 hover:bg-rose-700 hover:text-slate-100 hover:border-none py-1.5 px-4 rounded-lg font-semibold"
+              onClick={() => handlePopupClose({ type: "delete", value: false })}>
+              Cancel
+            </button>
+            <button
+              onClick={() =>
+                deleteTagHandler({
+                  tagId: popupContent?.tagId,
+                  token: userState?.token,
+                })
+              }
+              className="border-2  py-1.5 px-2 rounded-lg font-semibold bg-blue-500 text-slate-100"
+            >
+              Continue
+            </button>
+          </div>
+        </div>
+      </Popup>
     </div>
   );
 };
