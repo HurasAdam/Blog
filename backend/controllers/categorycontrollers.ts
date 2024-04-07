@@ -122,5 +122,25 @@ const updateCategory = async (
   }
 };
 
+const deleteCategory = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
 
-export { createCategory, getAllCategories, getCategory, updateCategory };
+    const category = await Category.findOneAndDelete({ _id: id })
+
+    if (!category) {
+      const error = new Error("Category not found");
+      return next(error);
+    }
+
+    return res.status(200).json({ message: "Category has been deleted sucessfully." });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { createCategory, getAllCategories, getCategory, updateCategory, deleteCategory };
