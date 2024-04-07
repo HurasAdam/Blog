@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const getCategories = async ({ token }: { token: string }) => {
+const getCategories = async ({ token, searchKeyword = "", page = 1, limit = 10 }: { token: string, searchKeyword: string, page: number, limit: number }) => {
   try {
     const config = {
       headers: {
@@ -9,7 +9,7 @@ const getCategories = async ({ token }: { token: string }) => {
     };
 
     const { data } = await axios.get(
-      "http://localhost:5000/api/category",
+      `http://localhost:5000/api/category?searchKeyword=${searchKeyword}&page=${page}&limit=${limit}`,
       config
     );
     return data;

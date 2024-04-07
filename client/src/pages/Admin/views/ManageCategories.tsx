@@ -24,9 +24,9 @@ const ManageCategories: React.FC = () => {
     const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
 
 
-    const { data: categories, isLoading, isFetching } = useQuery({
+    const { data: categories, isLoading, isFetching, refetch } = useQuery({
         queryFn: () => {
-            return getCategories({ token: userState?.token });
+            return getCategories({ token: userState?.token, searchKeyword, page: currentPage });
         },
         queryKey: ["categories"],
         refetchOnWindowFocus: false
