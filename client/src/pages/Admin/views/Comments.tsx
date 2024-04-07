@@ -20,6 +20,7 @@ const Comments: React.FC = () => {
   const [commentStatus, setCommentStatus] = useState("");
   const [popupContent, setPopupContent] = useState({});
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
 
   const {
     data: comments,
@@ -99,9 +100,14 @@ const Comments: React.FC = () => {
     setIsPopupOpen(value);
   };
 
-  const handlePopupClose = (value) => {
-    setPopupContent("");
-    setIsPopupOpen(value);
+  const handlePopupClose = ({ type, value }) => {
+    if (type === "delete") {
+      setPopupContent("");
+      setIsDeletePopupOpen(value);
+    } else {
+      setPopupContent("");
+      setIsPopupOpen(value);
+    }
   };
   console.log(popupContent);
   useEffect(() => {
@@ -326,15 +332,15 @@ const Comments: React.FC = () => {
         type="commentDetails"
         handlePopupClose={handlePopupClose}
         isPopupOpen={isPopupOpen}>
-        <div className="flex flex-col md:flex-row px-5 h-fit ">
+        <div className="flex flex-col md:flex-row px-5 h-fit break-all   ">
           <div className="flex flex-col md:pt-10">
             <img
               className="w-40 h-auto mx-auto rounded-lg md:min-w-[100px] md-h-auto lg:min-w-[140px]"
               src={popupContent?.avatar || images?.userImage}
             />
-            <span className="border-2 text-center">{popupContent?.name}</span>
+            <span className="border-2  text-center">{popupContent?.name}</span>
           </div>
-          <div className="flex flex-col gap-5 w-full ">
+          <div className="flex flex-col gap-5 w-full  ">
             <span className="text-blue-500 text-sm font-semibold font-roboto text-right">
               {" "}
               {new Date(popupContent?.createdAt).toLocaleDateString("en-US", {

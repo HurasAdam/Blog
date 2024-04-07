@@ -53,7 +53,6 @@ const createCategory = async ({ formData, token }) => {
         AUthorization: `Bearer ${token}`,
       },
     };
-
     const { data } = await axios.post("http://localhost:5000/api/category", formData, config)
     return data;
   } catch (error) {
@@ -70,17 +69,13 @@ const createCategory = async ({ formData, token }) => {
 
 const updateCategory = async ({ formData, token }) => {
   try {
-
     const { id, name, description } = formData
-
-
 
     const config = {
       headers: {
         AUthorization: `Bearer ${token}`,
       },
     };
-
     const { data } = await axios.put(
       `http://localhost:5000/api/category/${id}`,
       { name, description }, config
@@ -96,9 +91,28 @@ const updateCategory = async ({ formData, token }) => {
   }
 };
 
+const deleteCategory = async ({ categoryId, token }) => {
+  try {
+    const config = {
+      headers: {
+        AUthorization: `Bearer ${token}`,
+      },
+    };
+    const { data } = await axios.delete(
+      `http://localhost:5000/api/category/${categoryId}`, config);
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log("error message", error.message);
+      throw new Error(error.message);
+    } else {
+      throw new Error("An unexpected error occurred");
+    }
+  }
+};
 
 
 
 
 
-export { getCategories, createCategory, updateCategory, getCategory };
+export { getCategories, createCategory, updateCategory, getCategory, deleteCategory };
