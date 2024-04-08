@@ -113,14 +113,18 @@ const getAllPosts = async (
 
     if (categoryFilter && typeof categoryFilter === "string") {
 
-      const category = await Category.findOne({ name: categoryFilter });
+      const categories = categoryFilter.split(",");
 
-      if (category) {
-        where.categories = { $in: [category._id] };
-      }
+      const categoryIds = await Promise.all(
+        categories.map(async (categoryName) => {
+          const category = await Category.findOne({ name: categoryName });
+          return category ? category._id.toString() : "";
+        })
+      );
 
+      where.categories = { $in: categoryIds };
     }
-    console.log(where)
+
     let query = Post.find(where);
     const page = parseInt(req?.query?.page as string) || 1;
     const pageSize = parseInt(req?.query?.limit as string) || 10;
