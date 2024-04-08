@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getAllPosts = async ({ searchKeyword = "", page = 1, category = "", limit = 10 }) => {
+export const getAllPosts = async ({ searchKeyword = "", page = 1, category = [], limit = 10 }) => {
     try {
 
 

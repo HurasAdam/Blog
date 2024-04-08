@@ -66,7 +66,7 @@ declare global {
 export interface IPostWhere {
   title?: { $regex: string; $options: string };
   categories?: {
-    $in: Types.ObjectId[]
+    $in: string[]
   };
 }
 
