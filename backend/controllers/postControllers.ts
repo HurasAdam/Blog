@@ -3,6 +3,7 @@ import cloudinary from "cloudinary";
 import Post from "../models/Post";
 import Comment from "../models/Comment";
 import * as types from "../shared/types";
+import Category from "../models/PostCategories";
 
 const createPost = async (
   req: Request,
@@ -103,11 +104,23 @@ const getAllPosts = async (
 ) => {
   try {
     const filter = req.query.searchKeyword;
+    const categoryFilter = req.query.category
+
     let where: types.IPostWhere = {};
     if (filter && typeof filter === "string") {
       where.title = { $regex: filter, $options: "i" };
     }
 
+    if (categoryFilter && typeof categoryFilter === "string") {
+
+      const category = await Category.findOne({ name: categoryFilter });
+
+      if (category) {
+        where.categories = { $in: [category._id] };
+      }
+
+    }
+    console.log(where)
     let query = Post.find(where);
     const page = parseInt(req?.query?.page as string) || 1;
     const pageSize = parseInt(req?.query?.limit as string) || 10;
