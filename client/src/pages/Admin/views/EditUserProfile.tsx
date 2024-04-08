@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { getUserProfile, updateProfile, updateUserProfile } from '../../../services/usersApi';
+import { useSelector } from 'react-redux';
+import { getUserProfile, updateUserProfile } from '../../../services/usersApi';
 import { useParams } from 'react-router-dom';
 import UserProfileForm from '../forms/UserProfileForm';
 import { FaUserEdit } from "react-icons/fa";
@@ -10,7 +9,7 @@ import toast from 'react-hot-toast';
 const EditUserProfile = () => {
 
     const { id } = useParams()
-    const dispatch = useDispatch()
+
     const userState = useSelector((state: IRootUserState) => state.user.userInfo)
 
     const queryClient = useQueryClient();
@@ -19,7 +18,7 @@ const EditUserProfile = () => {
         queryFn: () => {
             return getUserProfile({ token: userState.token, userId: id });
         },
-        queryKey: ['user']
+        queryKey: ['user', id]
     })
 
 

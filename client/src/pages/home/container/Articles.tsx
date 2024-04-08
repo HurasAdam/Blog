@@ -10,7 +10,7 @@ import ErrorMessage from '../../../components/comments/ErrorMessage'
 const Articles: React.FC = () => {
 
     const { data: posts, isLoading, isError } = useQuery({
-        queryFn: () => getAllPosts(),
+        queryFn: () => getAllPosts({ page: 1 }),
         queryKey: ["posts"],
         onError: (error: Error) => {
             toast.error(error.message);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MainLayout from "../../components/MainLayout";
 import BreadCrumbs from "../../components/BreadCrumbs";
 import { images } from "../../constants";
@@ -20,6 +20,7 @@ const ArticleDetailPage: React.FC = () => {
   const userState = useSelector((state: IRootUserState) => state.user.userInfo);
 
   const [breadCrumbsData, setBreadCrumbsData] = useState([]);
+  const [category, setCategory] = useState("Jurek")
 
   const {
     data: postDetails,
@@ -37,16 +38,21 @@ const ArticleDetailPage: React.FC = () => {
         { name: "Blog", link: "/blog" },
         { name: "Article title", link: `/blog/${postDetails?._id}` },
       ]);
+      setCategory(postDetails?.categories[0].name)
     },
   });
 
-  const { data: postsData } = useQuery({
-    queryFn: () => getAllPosts(),
-    queryKey: ["posts"],
+
+  const { data: postsData, refetch } = useQuery({
+    queryFn: () => getAllPosts({ category: postDetails?.categories[0].name }),
+    queryKey: ["posts", category],
+
     onError: (error: Error) => {
       toast.error(error.message);
     },
   });
+
+
 
   if (isLoading) {
     return (

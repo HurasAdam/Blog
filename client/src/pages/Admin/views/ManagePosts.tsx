@@ -19,7 +19,7 @@ const ManagePosts: React.FC = () => {
     isFetching,
     refetch,
   } = useQuery({
-    queryFn: () => getAllPosts(searchKeyword, currentPage),
+    queryFn: () => getAllPosts({ searchKeyword, page: currentPage }),
     queryKey: ["posts", currentPage],
     refetchOnWindowFocus: false,
   });
