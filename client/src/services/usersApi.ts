@@ -106,16 +106,16 @@ export const updateProfilePicture = async ({ token, formData }: types.IUpdatePro
     }
 };
 
-export const getAllUsers = async ({ searchKeyword, token }): Promise<AxiosResponse<types.IUserInfo[]>> => {
+export const getAllUsers = async ({ searchKeyword, token, page, limit = 10 }) => {
     try {
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         };
-        const { data } = await axios.get(
-            `http://localhost:5000/api/users?username=${searchKeyword}`, config);
-        return data;
+        const { data, headers } = await axios.get(
+            `http://localhost:5000/api/users?username=${searchKeyword}&page=${page}&limit=${limit}`, config);
+        return { data, headers };
     } catch (error) {
         if (axios.isAxiosError(error)) {
             console.log('error message: ', error.message);

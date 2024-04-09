@@ -28,7 +28,7 @@ const ManageCategories: React.FC = () => {
         queryFn: () => {
             return getCategories({ token: userState?.token, searchKeyword, page: currentPage });
         },
-        queryKey: ["categories"],
+        queryKey: ["categories", currentPage],
         refetchOnWindowFocus: false
     });
 
@@ -160,14 +160,14 @@ const ManageCategories: React.FC = () => {
                                                 Loading...
                                             </td>
                                         </tr>
-                                    ) : categories?.length === 0 ? (
+                                    ) : categories?.data?.length === 0 ? (
                                         <tr>
                                             <td colSpan={5} className="text-center py-10 w-full">
                                                 No posts found
                                             </td>
                                         </tr>
                                     ) : (
-                                        categories?.map((category) => {
+                                        categories?.data?.map((category) => {
                                             return (
                                                 <tr>
                                                     <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
@@ -237,13 +237,15 @@ const ManageCategories: React.FC = () => {
                                     )}
                                 </tbody>
                             </table>
-                            {/* {!isLoading && (
-                <Pagination
-                  onPageChange={(page) => setCurrentPage(page)}
-                  currentPage={currentPage}
-                  totalPageCount={parseInt(tags?.headers?.["x-totalpagecount"])}
-                />
-              )} */}
+                            {!isLoading && (
+                                <Pagination
+                                    onPageChange={(page) => setCurrentPage(page)}
+                                    currentPage={currentPage}
+                                    totalPageCount={parseInt(
+                                        categories?.headers?.["x-totalpagecount"]
+                                    )}
+                                />
+                            )}
                         </div>
                     </div>
                 </div>

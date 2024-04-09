@@ -28,9 +28,9 @@ const ManageTags: React.FC = () => {
     refetch
   } = useQuery({
     queryFn: () => {
-      return getTags({ token: userState?.token, searchKeyword: searchKeyword, currentPage: currentPage });
+      return getTags({ token: userState?.token, searchKeyword: searchKeyword, page: currentPage });
     },
-    queryKey: ["tags"],
+    queryKey: ["tags", currentPage],
     refetchOnWindowFocus: false,
   });
 
@@ -167,7 +167,7 @@ const ManageTags: React.FC = () => {
                       </td>
                     </tr>
                   ) : (
-                    tags?.map((tag) => {
+                    tags?.data?.map((tag) => {
                       return (
                         <tr>
                           <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
@@ -252,13 +252,13 @@ const ManageTags: React.FC = () => {
                   )}
                 </tbody>
               </table>
-              {/* {!isLoading && (
+              {!isLoading && (
                 <Pagination
                   onPageChange={(page) => setCurrentPage(page)}
                   currentPage={currentPage}
                   totalPageCount={parseInt(tags?.headers?.["x-totalpagecount"])}
                 />
-              )} */}
+              )}
             </div>
           </div>
         </div>

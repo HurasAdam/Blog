@@ -28,7 +28,7 @@ const Users: React.FC = () => {
 
     const { data: users, isLoading, isFetching, refetch } = useQuery({
         queryFn: () => {
-            return getAllUsers({ searchKeyword: searchKeyword, token: userState?.token });
+            return getAllUsers({ searchKeyword: searchKeyword, token: userState?.token, page: currentPage });
         },
         queryKey: ["users"],
         refetchOnWindowFocus: false,
@@ -204,7 +204,7 @@ const Users: React.FC = () => {
                                             </td>
                                         </tr>
                                     ) : (
-                                        users?.map((user) => {
+                                        users?.data?.map((user) => {
                                             return (
                                                 <tr>
                                                     <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
@@ -288,13 +288,13 @@ const Users: React.FC = () => {
                                     )}
                                 </tbody>
                             </table>
-                            {/* {!isLoading && (
-                <Pagination
-                  onPageChange={(page) => setCurrentPage(page)}
-                  currentPage={currentPage}
-                  totalPageCount={parseInt(tags?.headers?.["x-totalpagecount"])}
-                />
-              )} */}
+                            {!isLoading && (
+                                <Pagination
+                                    onPageChange={(page) => setCurrentPage(page)}
+                                    currentPage={currentPage}
+                                    totalPageCount={parseInt(users?.headers?.["x-totalpagecount"])}
+                                />
+                            )}
                         </div>
                     </div>
                 </div>

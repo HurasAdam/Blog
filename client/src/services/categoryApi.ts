@@ -8,11 +8,11 @@ const getCategories = async ({ token, searchKeyword = "", page = 1, limit = 10 }
       },
     };
 
-    const { data } = await axios.get(
+    const { data, headers } = await axios.get(
       `http://localhost:5000/api/category?searchKeyword=${searchKeyword}&page=${page}&limit=${limit}`,
       config
     );
-    return data;
+    return { data, headers };
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.log("error message", error.message);
