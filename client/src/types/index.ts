@@ -18,6 +18,7 @@ export type INavItemProps = {
     item: {
         name: string;
         type: ItemType | string;
+        href: string;
         items?: string[];
     }
 }

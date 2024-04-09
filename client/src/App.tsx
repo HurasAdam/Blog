@@ -21,6 +21,7 @@ import NewCategory from "./pages/Admin/views/NewCategory";
 import EditCategory from "./pages/Admin/views/EditCategory";
 import EditTag from "./pages/Admin/views/EditTag";
 import EditUserProfile from "./pages/Admin/views/EditUserProfile";
+import BlogPage from "./pages/blog/BlogPage";
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
     <div className="App font-opensans">
       <Routes>
         <Route index path="/" element={<Home />} />
+        <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:id" element={<ArticleDetailPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />

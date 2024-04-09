@@ -46,7 +46,7 @@ const ArticleDetailPage: React.FC = () => {
   const categories = postDetails?.categories.map(category => category?.name) || [];
 
   const { data: postsData, refetch } = useQuery({
-    queryFn: () => getAllPosts({ category: categories }),
+    queryFn: () => getAllPosts({ category: categories, limit: 4 }),
     queryKey: ["posts", category],
 
     onError: (error: Error) => {

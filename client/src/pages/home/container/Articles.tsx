@@ -6,11 +6,12 @@ import { getAllPosts } from '../../../services/postApi'
 import toast from 'react-hot-toast'
 import ArticleCardSkeleton from '../../../components/comments/ArticleCardSkeleton'
 import ErrorMessage from '../../../components/comments/ErrorMessage'
+import { Link } from 'react-router-dom'
 
 const Articles: React.FC = () => {
 
     const { data: posts, isLoading, isError } = useQuery({
-        queryFn: () => getAllPosts({ page: 1 }),
+        queryFn: () => getAllPosts({ searchKeyword: "", page: 1, limit: 6 }),
         queryKey: ["posts"],
         onError: (error: Error) => {
             toast.error(error.message);
@@ -43,12 +44,13 @@ const Articles: React.FC = () => {
 
 
             </div>
-            <button
+            <Link
+                to="/blog"
                 className='mx-auto flex items-center gap-x-2 font-bold 
             border-2 border-primary px-6 py-3 rounded-lg text-primary'>
                 <span>More articles</span>
                 <FaArrowRight className='w-3 h-3' />
-            </button>
+            </Link>
 
         </section>
     )
