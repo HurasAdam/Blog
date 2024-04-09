@@ -175,6 +175,26 @@ const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
       ];
     }
     const result = await User.find(where).select(["-password"])
+
+    const page = parseInt(req?.query?.page as string) || 1;
+    const pageSize = parseInt(req?.query?.limit as string) || 10;
+    const skip = (page - 1) * pageSize;
+    const total = await User.find(where).countDocuments();
+    const pages = Math.ceil(total / pageSize);
+
+    res.header({
+      "x-filter": selectedUser,
+      "x-totalcount": JSON.stringify(total),
+      "x-currentpage": JSON.stringify(page),
+      "x-pageSize": JSON.stringify(pageSize),
+      "x-totalpagecount": JSON.stringify(pages),
+    });
+
+    if (page > pages) {
+      return res.json([]);
+    }
+
+
     return res.status(200).json(result)
   } catch (error) {
     console.log(error);
