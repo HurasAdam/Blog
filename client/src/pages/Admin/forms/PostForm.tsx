@@ -158,7 +158,7 @@ const PostForm: React.FC = ({ categories, tags, handleFileChange, handleDeleteIm
                     </span>
                     <div className=" grid-row-5 gap-3 md:grid-cols-3 md:gap-3 lg:grid">
                         {categories &&
-                            categories.map((category) => {
+                            categories?.map((category) => {
                                 const id = category?._id
                                 const formCategoriesState = watch("categories")
                                 const isChecked = formCategoriesState?.some((c) => c._id === id)
@@ -201,7 +201,7 @@ const PostForm: React.FC = ({ categories, tags, handleFileChange, handleDeleteIm
                     </span>
                     <div className=" grid-row-5 gap-3 md:grid-cols-3 md:gap-3 lg:grid">
                         {tags &&
-                            tags.map((tag) => {
+                            tags?.map((tag) => {
                                 const id = tag?._id
                                 const formTagsState = watch("tags")
                                 const isChecked = formTagsState?.some((t) => t._id === id)

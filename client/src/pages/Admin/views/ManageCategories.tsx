@@ -17,8 +17,6 @@ const ManageCategories: React.FC = () => {
     const [searchKeyword, setSearchKeyword] = useState<string>("");
     const [currentPage, setCurrentPage] = useState<number>(1);
 
-
-
     const [popupContent, setPopupContent] = useState({});
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);

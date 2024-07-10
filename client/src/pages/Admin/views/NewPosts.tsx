@@ -36,6 +36,7 @@ const NewPost: React.FC = () => {
     queryKey: ["categories"],
   });
 
+
   const { data: tags } = useQuery({
     queryFn: () => {
       return getTags({ token: userState?.token });
@@ -84,15 +85,15 @@ const NewPost: React.FC = () => {
         <IoCreateOutline className="w-8 h-auto mr-2" />
         Create Post
       </h1>
-      <PostForm
-        categories={categories}
-        tags={tags}
+     {categories&& tags&& <PostForm
+        categories={categories?.data}
+        tags={tags?.data}
         handleFileChange={handleFileChange}
         handleDeleteImage={handleDeleteImage}
         postPicture={postPicture}
         value={value}
         handleSave={handleSave}
-      />
+      />}
     </section>
   )
 
