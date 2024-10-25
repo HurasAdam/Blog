@@ -110,11 +110,11 @@ const EditPost: React.FC = () => {
                     Edit Post
                 </h1>
 
-                {postDetails ? (<PostForm
+                {postDetails  ? (<PostForm
                     type="edit"
-                    categories={categories}
+                    categories={categories&&categories}
                     post={postDetails}
-                    tags={tags}
+                    tags={tags&&tags}
                     handleFileChange={handleFileChange}
                     handleDeleteImage={handleDeleteImage}
                     postPicture={postPicture}
